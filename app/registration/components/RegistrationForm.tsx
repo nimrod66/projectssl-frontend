@@ -1,6 +1,7 @@
 "use client";
 
 import { useState } from "react";
+import toast from "react-hot-toast";
 
 type ErrorMap = Record<string, string | undefined>;
 
@@ -61,11 +62,13 @@ export default function SslRegistrationForm() {
 
     if (!validate(form)) {
       setMessage("Please fix the highlighted fields.");
+      toast.error("Please fix the highlighted fields.");
       return;
     }
 
     setLoading(true);
     setMessage("");
+    const loadingToast = toast.loading("Submitting your application...");
 
     try {
       const formData = new FormData(form);
@@ -146,10 +149,16 @@ export default function SslRegistrationForm() {
       ]);
 
       setMessage("✅ Application submitted successfully!");
+      toast.success("Application submitted successfully!", {
+        id: loadingToast,
+      });
       form.reset();
     } catch (err: any) {
       console.error(err);
       setMessage("❌ Something went wrong. Please try again.");
+      toast.error("Something went wrong. Please try again.", {
+        id: loadingToast,
+      });
     } finally {
       setLoading(false);
     }

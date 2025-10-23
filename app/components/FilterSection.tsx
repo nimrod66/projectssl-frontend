@@ -124,25 +124,53 @@ export default function FilterSection({
     fetchFiltered(reset);
   };
 
+  const Section = ({
+    title,
+    children,
+  }: {
+    title: string;
+    children: React.ReactNode;
+  }) => (
+    <div className="rounded-xl bg-gray-50 p-4 ring-1 ring-gray-200">
+      <h3 className="text-sm font-semibold text-purple-800 mb-3 flex items-center gap-2">
+        <span className="inline-block h-2 w-2 rounded-full bg-purple-400"></span>
+        {title}
+      </h3>
+      {children}
+    </div>
+  );
+
+  const CheckboxRow = ({ children }: { children: React.ReactNode }) => (
+    <div className="grid grid-cols-1 gap-2 sm:gap-3 text-gray-800">
+      {children}
+    </div>
+  );
+
   return (
     <section id="filter">
-      <div className="bg-white rounded-xl border border-gray-200 shadow-sm overflow-hidden">
+      <div className="bg-white rounded-2xl border border-gray-200 shadow-sm overflow-hidden">
         {/* Header */}
-        <div className="px-4 sm:px-5 py-3 sm:py-4 bg-gradient-to-r from-purple-600 to-purple-700 text-white">
-          <h2 className="text-lg sm:text-xl font-bold">Filter Maids</h2>
-          <p className="text-white/80 text-xs sm:text-sm">
-            Refine by home setup, skills, child care, and location
-          </p>
+        <div className="px-4 sm:px-5 py-3 bg-gradient-to-r from-purple-600 to-purple-700 text-white">
+          <div className="flex items-center justify-between">
+            <div>
+              <h2 className="text-base sm:text-lg font-bold">Filter Maids</h2>
+              <p className="text-white/80 text-xs">
+                Refine by home setup, skills, child care, and location
+              </p>
+            </div>
+            <button
+              onClick={clearFilters}
+              className="hidden sm:inline-flex items-center text-xs bg-white/10 hover:bg-white/20 px-3 py-1 rounded-md"
+            >
+              Clear all
+            </button>
+          </div>
         </div>
 
         {/* Filters */}
-        <div className="p-4 sm:p-5 space-y-4 sm:space-y-6">
-          {/* You have */}
-          <div className="rounded-lg bg-gray-50 p-3 sm:p-4">
-            <h3 className="text-sm font-semibold text-purple-800 mb-3">
-              You have
-            </h3>
-            <div className="space-y-2 sm:space-y-3 text-sm text-gray-800">
+        <div className="p-4 sm:p-6 space-y-4 sm:space-y-6">
+          <Section title="You have">
+            <CheckboxRow>
               {[
                 { key: "hasCat", label: "Cat" },
                 { key: "hasDog", label: "Dog" },
@@ -152,11 +180,11 @@ export default function FilterSection({
               ].map(({ key, label }) => (
                 <label
                   key={key}
-                  className="flex items-center space-x-3 cursor-pointer"
+                  className="flex items-center gap-3 cursor-pointer bg-white rounded-md border px-3 py-2 hover:bg-gray-50"
                 >
                   <input
                     type="checkbox"
-                    className="checkbox checkbox-primary w-4 h-4"
+                    className="checkbox checkbox-primary w-4 h-4 shrink-0"
                     checked={!!filters[key as keyof Filters]}
                     onChange={() =>
                       handleCheckboxChange(
@@ -164,29 +192,25 @@ export default function FilterSection({
                       )
                     }
                   />
-                  <span className="text-sm sm:text-base">{label}</span>
+                  <span className="text-sm break-words">{label}</span>
                 </label>
               ))}
-            </div>
-          </div>
+            </CheckboxRow>
+          </Section>
 
-          {/* Special Skills */}
-          <div className="rounded-lg bg-gray-50 p-3 sm:p-4">
-            <h3 className="text-sm font-semibold text-purple-800 mb-3">
-              Special skills
-            </h3>
-            <div className="space-y-2 sm:space-y-3 text-sm text-gray-800">
+          <Section title="Special skills">
+            <CheckboxRow>
               {[
                 { key: "elderlyCare", label: "Elderly Care" },
                 { key: "specialNeeds", label: "Special Needs Care" },
               ].map(({ key, label }) => (
                 <label
                   key={key}
-                  className="flex items-center space-x-3 cursor-pointer"
+                  className="flex items-center gap-3 cursor-pointer bg-white rounded-md border px-3 py-2 hover:bg-gray-50"
                 >
                   <input
                     type="checkbox"
-                    className="checkbox checkbox-primary w-4 h-4"
+                    className="checkbox checkbox-primary w-4 h-4 shrink-0"
                     checked={!!filters[key as keyof Filters]}
                     onChange={() =>
                       handleCheckboxChange(
@@ -194,29 +218,25 @@ export default function FilterSection({
                       )
                     }
                   />
-                  <span className="text-sm sm:text-base">{label}</span>
+                  <span className="text-sm break-words">{label}</span>
                 </label>
               ))}
-            </div>
-          </div>
+            </CheckboxRow>
+          </Section>
 
-          {/* Babysitting */}
-          <div className="rounded-lg bg-gray-50 p-3 sm:p-4">
-            <h3 className="text-sm font-semibold text-purple-800 mb-3">
-              Babysitting
-            </h3>
-            <div className="space-y-2 sm:space-y-3 text-sm text-gray-800">
+          <Section title="Babysitting">
+            <CheckboxRow>
               {[
                 { key: "olderThan1", label: "Older than 1 year" },
                 { key: "youngerThan1", label: "Younger than 1 year" },
               ].map(({ key, label }) => (
                 <label
                   key={key}
-                  className="flex items-center space-x-3 cursor-pointer"
+                  className="flex items-center gap-3 cursor-pointer bg-white rounded-md border px-3 py-2 hover:bg-gray-50"
                 >
                   <input
                     type="checkbox"
-                    className="checkbox checkbox-primary w-4 h-4"
+                    className="checkbox checkbox-primary w-4 h-4 shrink-0"
                     checked={!!filters[key as keyof Filters]}
                     onChange={() =>
                       handleCheckboxChange(
@@ -224,24 +244,20 @@ export default function FilterSection({
                       )
                     }
                   />
-                  <span className="text-sm sm:text-base">{label}</span>
+                  <span className="text-sm break-words">{label}</span>
                 </label>
               ))}
-            </div>
-          </div>
+            </CheckboxRow>
+          </Section>
 
-          {/* Current Location */}
-          <div className="rounded-lg bg-gray-50 p-3 sm:p-4">
-            <h3 className="text-sm font-semibold text-purple-800 mb-3">
-              Current Location
-            </h3>
-            <div className="space-y-2 sm:space-y-3 text-sm text-gray-800">
+          <Section title="Current Location">
+            <div className="grid grid-cols-1 gap-2">
               {locations.map((loc) => (
                 <label
                   key={loc.id}
-                  className="flex items-center justify-between cursor-pointer p-2 bg-white rounded-md border border-gray-200 hover:bg-gray-50"
+                  className="flex items-center justify-between cursor-pointer p-3 bg-white rounded-md border hover:bg-gray-50"
                 >
-                  <div className="flex items-center space-x-3">
+                  <div className="flex items-center gap-3">
                     <input
                       type="radio"
                       name="currentLocation"
@@ -249,19 +265,19 @@ export default function FilterSection({
                       checked={filters.currentLocation === loc.id}
                       onChange={() => handleLocationChange(loc.id)}
                     />
-                    <span className="font-medium text-sm sm:text-base">
+                    <span className="font-medium text-sm break-words">
                       {loc.name}
                     </span>
                   </div>
-                  <span className="text-sm text-gray-500">({loc.count})</span>
+                  <span className="text-xs text-gray-500">{loc.count}</span>
                 </label>
               ))}
             </div>
-          </div>
+          </Section>
         </div>
 
         {/* Footer */}
-        <div className="px-4 sm:px-5 py-3 sm:py-4 border-t border-gray-200 bg-white flex flex-col sm:flex-row gap-2 sm:gap-3">
+        <div className="px-4 sm:px-5 py-4 border-t border-gray-200 bg-white flex flex-col sm:flex-row gap-2 sm:gap-3">
           <button
             onClick={clearFilters}
             className="btn btn-outline btn-sm flex-1 text-sm"

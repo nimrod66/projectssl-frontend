@@ -1,7 +1,8 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import api from "@/app/staff/auth/api";
+import toast from "react-hot-toast";
 
 import {
   Search,
@@ -59,6 +60,7 @@ export default function ReceptionistBodySection() {
     null
   );
   const [searchQuery, setSearchQuery] = useState("");
+  const [searchInput, setSearchInput] = useState("");
   const [statusFilter, setStatusFilter] = useState<string>("ALL");
   const resumeLabels = ["Resume", "Birth Certificate", "Good Conduct"];
   const [previewMedia, setPreviewMedia] = useState<{
@@ -67,21 +69,98 @@ export default function ReceptionistBodySection() {
     name?: string;
   } | null>(null);
 
+  const [loading, setLoading] = useState<boolean>(false);
+  const [error, setError] = useState<string | null>(null);
+  const [lastUpdatedAt, setLastUpdatedAt] = useState<number | null>(null);
+  const pollingTimerRef = useRef<NodeJS.Timeout | null>(null);
+  const currentIntervalMsRef = useRef<number>(30000);
+  const abortControllerRef = useRef<AbortController | null>(null);
+
   const API_BASE = process.env.NEXT_PUBLIC_API_BASE;
 
-  //Fetch Applicants
-  const fetchApplicants = async () => {
+  //Fetch Applicants with abort + error handling
+  const fetchApplicants = async (opts?: { silent?: boolean }) => {
     try {
-      const res = await api.get<Applicant[]>(`${API_BASE}/api/applications`);
-      setApplicants(res.data);
-      setFilteredApplicants(res.data);
-    } catch (err) {
+      if (!opts?.silent) setLoading(true);
+      setError(null);
+      abortControllerRef.current?.abort();
+      const controller = new AbortController();
+      abortControllerRef.current = controller;
+      const res = await api.get<Applicant[]>(`${API_BASE}/api/applications`, {
+        signal: controller.signal as any,
+      });
+      setApplicants(res.data || []);
+      setLastUpdatedAt(Date.now());
+      // reset backoff on success
+      currentIntervalMsRef.current = 30000;
+    } catch (err: any) {
+      if (err?.name === "CanceledError" || err?.name === "AbortError") {
+        return; // ignore aborted requests
+      }
       console.error(err);
+      setError(err?.message || "Failed to load applicants");
+      // backoff on error up to 2 min
+      currentIntervalMsRef.current = Math.min(
+        currentIntervalMsRef.current * 2,
+        120000
+      );
+    } finally {
+      if (!opts?.silent) setLoading(false);
     }
   };
 
+  // initial load
   useEffect(() => {
     fetchApplicants();
+  }, []);
+
+  // debounce search input -> searchQuery
+  useEffect(() => {
+    const t = setTimeout(() => setSearchQuery(searchInput), 250);
+    return () => clearTimeout(t);
+  }, [searchInput]);
+
+  // derived filtering
+  useEffect(() => {
+    let filtered = applicants;
+    if (searchQuery.trim()) {
+      const q = searchQuery.toLowerCase();
+      filtered = filtered.filter(
+        (app) =>
+          app.fullName.toLowerCase().includes(q) ||
+          app.email.toLowerCase().includes(q) ||
+          app.phoneNumber.includes(searchQuery)
+      );
+    }
+    if (statusFilter !== "ALL") {
+      filtered = filtered.filter((app) => app.status === statusFilter);
+    }
+    setFilteredApplicants(filtered);
+  }, [applicants, searchQuery, statusFilter]);
+
+  // polling with visibility awareness
+  useEffect(() => {
+    const schedule = () => {
+      if (pollingTimerRef.current) clearTimeout(pollingTimerRef.current);
+      pollingTimerRef.current = setTimeout(() => {
+        if (document.visibilityState === "visible") {
+          fetchApplicants({ silent: true });
+        }
+        schedule();
+      }, currentIntervalMsRef.current);
+    };
+    schedule();
+    const onVis = () => {
+      if (document.visibilityState === "visible") {
+        fetchApplicants({ silent: true });
+      }
+    };
+    document.addEventListener("visibilitychange", onVis);
+    return () => {
+      document.removeEventListener("visibilitychange", onVis);
+      if (pollingTimerRef.current) clearTimeout(pollingTimerRef.current);
+      abortControllerRef.current?.abort();
+    };
   }, []);
 
   const handleDownload = (url: string, filename: string) => {
@@ -91,47 +170,27 @@ export default function ReceptionistBodySection() {
     link.click();
   };
 
-  // Search and filter applicants
+  // Search input handler (debounced)
   const handleSearch = (query: string) => {
-    setSearchQuery(query);
-    let filtered = applicants;
-
-    // Filter by search query
-    if (query.trim()) {
-      filtered = filtered.filter(
-        (app) =>
-          app.fullName.toLowerCase().includes(query.toLowerCase()) ||
-          app.email.toLowerCase().includes(query.toLowerCase()) ||
-          app.phoneNumber.includes(query)
-      );
-    }
-
-    // Filter by status
-    if (statusFilter !== "ALL") {
-      filtered = filtered.filter((app) => app.status === statusFilter);
-    }
-
-    setFilteredApplicants(filtered);
+    setSearchInput(query);
   };
 
   const handleStatusFilter = (status: string) => {
     setStatusFilter(status);
-    let filtered = applicants;
+  };
 
-    if (searchQuery.trim()) {
-      filtered = filtered.filter(
-        (app) =>
-          app.fullName.toLowerCase().includes(searchQuery.toLowerCase()) ||
-          app.email.toLowerCase().includes(searchQuery.toLowerCase()) ||
-          app.phoneNumber.includes(searchQuery)
-      );
+  // Soft delete applicant (frontend only)
+  const handleSoftDelete = (id: number) => {
+    if (
+      !confirm("Are you sure you want to remove this applicant from the view?")
+    ) {
+      return;
     }
 
-    if (status !== "ALL") {
-      filtered = filtered.filter((app) => app.status === status);
-    }
-
-    setFilteredApplicants(filtered);
+    // Remove from applicants list (frontend only)
+    setApplicants((prev) => prev.filter((app) => app.id !== id));
+    setSelectedApplicant(null);
+    toast.success("Applicant removed from view");
   };
 
   const getStatusBadge = (status: string) => {
@@ -167,7 +226,7 @@ export default function ReceptionistBodySection() {
   return (
     <div className="min-h-screen bg-gradient-to-br from-purple-50 to-yellow-50 p-3 sm:p-4 lg:p-6">
       {/* Header */}
-      <header className="bg-white rounded-xl shadow-lg p-4 sm:p-6 mb-4 sm:mb-6">
+      <header className="bg-white rounded-xl shadow-lg p-4 sm:p-6 mb-4 sm:mb-6 border border-purple-100">
         <div className="flex flex-col lg:flex-row justify-between items-start lg:items-center gap-4">
           <div>
             <h1 className="text-2xl sm:text-3xl font-bold text-purple-800 mb-2">
@@ -183,15 +242,15 @@ export default function ReceptionistBodySection() {
               <input
                 type="text"
                 placeholder="Search by name, email, or phone..."
-                value={searchQuery}
+                value={searchInput}
                 onChange={(e) => handleSearch(e.target.value)}
-                className="pl-10 pr-4 py-2 border  border-gray-900 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent w-full sm:w-64 text-sm"
+                className="pl-10 pr-4 py-2 border border-purple-200 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent w-full sm:w-64 text-sm"
               />
             </div>
             <select
               value={statusFilter}
               onChange={(e) => handleStatusFilter(e.target.value)}
-              className="px-3 sm:px-4 py-2 border border-gray-900 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent text-sm"
+              className="px-3 sm:px-4 py-2 border border-purple-200 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent text-sm"
             >
               <option value="ALL">All Status</option>
               <option value="PENDING">Pending</option>
@@ -199,12 +258,27 @@ export default function ReceptionistBodySection() {
               <option value="APPROVED">Approved</option>
               <option value="REJECTED">Rejected</option>
             </select>
+            <button
+              onClick={() => fetchApplicants()}
+              className="inline-flex items-center gap-2 px-3 sm:px-4 py-2 rounded-lg bg-purple-600 hover:bg-purple-700 text-white text-sm"
+            >
+              {loading ? (
+                <span className="h-4 w-4 rounded-full border-2 border-purple-300 border-t-white animate-spin" />
+              ) : (
+                <span className="inline-block">Refresh</span>
+              )}
+            </button>
           </div>
         </div>
+        {lastUpdatedAt && (
+          <div className="mt-2 text-xs text-gray-500">
+            Last updated: {new Date(lastUpdatedAt).toLocaleTimeString()}
+          </div>
+        )}
       </header>
 
       {/* Results Count */}
-      <div className="bg-white rounded-lg shadow-md p-3 sm:p-4 mb-4 sm:mb-6">
+      <div className="bg-white rounded-lg shadow-md p-3 sm:p-4 mb-4 sm:mb-6 border border-purple-100">
         <div className="flex items-center justify-between">
           <div className="flex items-center gap-2">
             <Users className="w-4 h-4 sm:w-5 sm:h-5 text-purple-600" />
@@ -213,15 +287,54 @@ export default function ReceptionistBodySection() {
               {filteredApplicants.length !== 1 ? "s" : ""}
             </span>
           </div>
+          <div className="text-xs text-gray-500 hidden sm:block">
+            Auto-refreshing every ~
+            {Math.round(currentIntervalMsRef.current / 1000)}s
+          </div>
         </div>
       </div>
+
+      {/* States */}
+      {loading && applicants.length === 0 && (
+        <div className="flex items-center justify-center py-16">
+          <div className="flex items-center gap-3 text-purple-700">
+            <span className="h-5 w-5 rounded-full border-2 border-purple-300 border-top-purple-700 animate-spin" />
+            <span className="font-medium">Loading…</span>
+          </div>
+        </div>
+      )}
+      {!loading && error && (
+        <div className="bg-red-50 border border-red-200 text-red-700 rounded-xl p-4 mb-4">
+          <div className="flex items-start gap-3">
+            <span className="mt-1">⚠️</span>
+            <div>
+              <p className="font-semibold">Failed to load applicants</p>
+              <p className="text-sm">{error}</p>
+              <button
+                onClick={() => fetchApplicants()}
+                className="mt-3 inline-flex items-center gap-2 px-3 py-1.5 rounded-lg bg-red-600 text-white hover:bg-red-700"
+              >
+                Retry
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+      {!loading && !error && filteredApplicants.length === 0 && (
+        <div className="bg-purple-50 border border-purple-200 text-purple-800 rounded-xl p-6 mb-4">
+          <p className="font-semibold">No applicants found</p>
+          <p className="text-sm mt-1">
+            Try changing your search or status filter.
+          </p>
+        </div>
+      )}
 
       {/* Applicants List */}
       <div className="space-y-3 sm:space-y-4">
         {filteredApplicants.map((applicant) => (
           <div
             key={applicant.id}
-            className="bg-white rounded-xl shadow-lg hover:shadow-xl transition-shadow cursor-pointer"
+            className="bg-white rounded-xl shadow-lg hover:shadow-xl transition-shadow cursor-pointer border border-purple-100"
             onClick={() => setSelectedApplicant(applicant)}
           >
             <div className="p-4 sm:p-6">
@@ -273,10 +386,14 @@ export default function ReceptionistBodySection() {
 
       {/* Detailed Modal */}
       {selectedApplicant && (
-        <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 z-50 p-2 sm:p-4">
-          <div className="bg-white rounded-xl shadow-2xl w-full max-w-4xl max-h-[90vh] overflow-y-auto">
+        <div
+          className="fixed inset-0 flex items-center justify-center bg-black/50 z-50 p-2 sm:p-4"
+          role="dialog"
+          aria-modal="true"
+        >
+          <div className="bg-white rounded-2xl shadow-2xl w-full max-w-4xl max-h-[90vh] overflow-y-auto border border-purple-100">
             {/* Modal Header */}
-            <div className="bg-gradient-to-r from-purple-600 to-purple-700 px-4 sm:px-6 py-3 sm:py-4 rounded-t-xl">
+            <div className="bg-gradient-to-r from-purple-600 to-purple-700 px-4 sm:px-6 py-3 sm:py-4 rounded-t-2xl">
               <div className="flex justify-between items-center">
                 <h2 className="text-lg sm:text-xl font-bold text-white">
                   Applicant Details: {selectedApplicant.fullName}
@@ -658,8 +775,15 @@ export default function ReceptionistBodySection() {
                 </div>
               </div>
 
-              {/* Close Button */}
-              <div className="flex justify-end pt-4 sm:pt-6 border-t border-gray-200">
+              {/* Actions */}
+              <div className="flex justify-end gap-2 sm:gap-4 pt-4 sm:pt-6 border-t border-gray-200">
+                <button
+                  className="bg-red-500 hover:bg-red-600 text-white px-4 sm:px-6 py-2 rounded-lg flex items-center gap-2 transition-colors text-sm"
+                  onClick={() => handleSoftDelete(selectedApplicant.id)}
+                >
+                  <XCircle className="w-4 h-4" />
+                  Remove from View
+                </button>
                 <button
                   className="bg-gray-500 hover:bg-gray-600 text-white px-4 sm:px-6 py-2 rounded-lg transition-colors text-sm"
                   onClick={() => setSelectedApplicant(null)}

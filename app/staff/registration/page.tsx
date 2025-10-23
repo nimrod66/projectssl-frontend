@@ -1,8 +1,8 @@
-// app/register/page.tsx
 "use client";
 
 import { useState } from "react";
 import api from "../auth/api";
+import toast from "react-hot-toast";
 
 export default function StaffRegistrationPage() {
   const [form, setForm] = useState({
@@ -31,6 +31,7 @@ export default function StaffRegistrationPage() {
 
     if (form.password !== form.confirmPassword) {
       setMessage("❌ Passwords do not match.");
+      toast.error("Passwords do not match");
       setLoading(false);
       return;
     }
@@ -45,10 +46,11 @@ export default function StaffRegistrationPage() {
         password: form.password,
       });
       setMessage("✅ Registration successful! You can now log in.");
+      toast.success("Registration successful");
     } catch (err: any) {
-      setMessage(
-        "❌ " + (err.response?.data?.message || "Registration failed")
-      );
+      const msg = err.response?.data?.message || "Registration failed";
+      setMessage("❌ " + msg);
+      toast.error(msg);
     } finally {
       setLoading(false);
     }

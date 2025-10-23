@@ -1,8 +1,9 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import api from "../auth/api";
+import toast from "react-hot-toast";
 
 export default function StaffLoginPage() {
   const [email, setEmail] = useState("");
@@ -27,6 +28,7 @@ export default function StaffLoginPage() {
       localStorage.setItem("role", role);
 
       setMessage("✅ Login successful!");
+      toast.success("Login successful");
 
       if (role === "SUPER_ADMIN") {
         router.push("/staff/dashboard/control");
@@ -36,7 +38,9 @@ export default function StaffLoginPage() {
         router.push("/staff/dashboard/receptionist");
       }
     } catch (err: any) {
-      setMessage("❌ " + (err.response?.data?.message || "Login failed"));
+      const msg = err.response?.data?.message || "Login failed";
+      setMessage("❌ " + msg);
+      toast.error(msg);
     } finally {
       setLoading(false);
     }
