@@ -7,18 +7,21 @@ import toast from "react-hot-toast";
 interface InternationalApplicant {
   id: number;
   fullName: string;
-  email: string;
   phoneNumber: string;
+  email: string;
   dob?: string;
   age?: number;
   nationality?: string;
-  experience?: string;
-  currentSalary?: number;
+  religion?: string;
+  maritalStatus?: string[];
+  numberOfKids?: string;
+  educationLevel?: string[];
   currentProfession?: string;
+  currentSalary?: number;
   currentLocation?: string;
   languages: string[];
   employmentStatus?: string;
-  jobInterest?: string;
+  jobRecruitment?: string;
   status: "PENDING" | "VETTED" | "APPROVED" | "REJECTED" | "HIRED";
   createdAt?: string;
   updatedAt?: string;
@@ -37,7 +40,7 @@ interface MediaFileDto {
   fileUrl: string;
 }
 
-export default function InternationalApplicantsSection() {
+export default function InternationalApplicant() {
   const [applicants, setApplicants] = useState<InternationalApplicant[]>([]);
   const [filteredApplicants, setFilteredApplicants] = useState<
     InternationalApplicant[]
@@ -55,6 +58,9 @@ export default function InternationalApplicantsSection() {
   const currentIntervalMsRef = useRef<number>(30000);
   const abortControllerRef = useRef<AbortController | null>(null);
 
+  /** -------------------------------
+   * FETCH APPLICANTS
+   * ------------------------------- */
   const fetchApplicants = async (opts?: { silent?: boolean }) => {
     try {
       if (!opts?.silent) setLoading(true);
@@ -101,6 +107,9 @@ export default function InternationalApplicantsSection() {
     fetchApplicants();
   }, []);
 
+  /** -------------------------------
+   * SEARCH & FILTER
+   * ------------------------------- */
   useEffect(() => {
     const t = setTimeout(() => setSearchQuery(searchInput), 250);
     return () => clearTimeout(t);
@@ -118,6 +127,9 @@ export default function InternationalApplicantsSection() {
     );
   }, [applicants, searchQuery]);
 
+  /** -------------------------------
+   * POLLING
+   * ------------------------------- */
   useEffect(() => {
     const schedule = () => {
       if (pollingTimerRef.current) clearTimeout(pollingTimerRef.current);
@@ -141,6 +153,9 @@ export default function InternationalApplicantsSection() {
     };
   }, []);
 
+  /** -------------------------------
+   * UPLOAD YOUTUBE LINK
+   * ------------------------------- */
   const uploadYoutubeLink = async (applicantId: number, youtubeUrl: string) => {
     if (!youtubeUrl.trim()) {
       toast.error("Please enter a valid YouTube URL");
@@ -176,6 +191,9 @@ export default function InternationalApplicantsSection() {
     }
   };
 
+  /** -------------------------------
+   * VET / APPROVE / REJECT / HIRE / RESTORE
+   * ------------------------------- */
   const handleVetAction = async (id: number, action: "approve" | "reject") => {
     if (
       action === "approve" &&
@@ -262,6 +280,9 @@ export default function InternationalApplicantsSection() {
     }
   };
 
+  /** -------------------------------
+   * STATUS COUNTS
+   * ------------------------------- */
   const pendingCount = applicants.filter((a) => a.status === "PENDING").length;
   const vettedCount = applicants.filter((a) => a.status === "VETTED").length;
   const approvedCount = applicants.filter(

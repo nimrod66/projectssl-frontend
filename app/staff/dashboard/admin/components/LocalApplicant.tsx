@@ -43,7 +43,7 @@ const jobInterestMap: Record<string, string> = {
   INTERNATIONAL_JOBS: "International Jobs",
 };
 
-export default function InternationalApplicants() {
+export default function LocalApplicant() {
   const [applicants, setApplicants] = useState<Applicant[]>([]);
   const [searchQuery, setSearchQuery] = useState("");
   const [searchInput, setSearchInput] = useState("");
