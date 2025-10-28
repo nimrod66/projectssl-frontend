@@ -6,7 +6,7 @@ const handleLogout = () => {
   router.push("/login");
 };
 
-export function Logoout() {
+export function Logout() {
   return (
     <button
       onClick={handleLogout}
