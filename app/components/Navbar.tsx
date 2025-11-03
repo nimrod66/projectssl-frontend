@@ -42,19 +42,6 @@ export default function Navbar() {
 
           {/* CTA Buttons */}
           <div className="flex items-center space-x-2 sm:space-x-4">
-            <Link
-              href="/registration"
-              className="hidden sm:inline-flex btn btn-primary btn-sm bg-yellow-400 text-purple-800 hover:bg-yellow-500 font-semibold"
-            >
-              Register Here
-            </Link>
-            <Link
-              href="/registration"
-              className="sm:hidden btn btn-primary btn-xs bg-yellow-400 text-purple-800 hover:bg-yellow-500 font-semibold"
-            >
-              Register
-            </Link>
-
             {/* Mobile Menu Button */}
             <button
               className="lg:hidden btn btn-ghost btn-sm p-2"

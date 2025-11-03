@@ -22,6 +22,7 @@
     "leaflet-defaulticon-compatibility": "^0.1.2",
     "lucide-react": "^0.542.0",
     "next": "^16.0.0",
+    "pdfjs-dist": "^5.4.394",
     "react": "19.1.0",
     "react-dom": "19.1.0",
     "react-hot-toast": "^2.6.0",
@@ -32,6 +33,7 @@
     "react-router-dom": "^7.8.2",
     "regenerator-runtime": "^0.14.1",
     "swiper": "^11.2.10",
+    "tesseract.js": "^6.0.1",
     "three": "^0.180.0",
     "whatwg-fetch": "^3.6.20"
   },

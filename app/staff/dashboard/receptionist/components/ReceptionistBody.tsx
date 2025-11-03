@@ -2,6 +2,7 @@
 
 import { useEffect, useRef, useState } from "react";
 import api from "@/app/staff/auth/api";
+import { getYouTubeEmbedUrl } from "../../admin/components/utils/youtubeUtils";
 
 import {
   Search,
@@ -113,7 +114,7 @@ export default function ReceptionistBodySection() {
   const [error, setError] = useState<string | null>(null);
   const [lastUpdatedAt, setLastUpdatedAt] = useState<number | null>(null);
   const pollingTimerRef = useRef<NodeJS.Timeout | null>(null);
-  const currentIntervalMsRef = useRef<number>(30000);
+  const currentIntervalMsRef = useRef<number>(60000);
   const abortControllerRef = useRef<AbortController | null>(null);
 
   const API_BASE = process.env.NEXT_PUBLIC_API_BASE;
@@ -138,7 +139,7 @@ export default function ReceptionistBodySection() {
       setDomesticApplicants(domesticRes.data || []);
       setInternationalApplicants(internationalRes.data || []);
       setLastUpdatedAt(Date.now());
-      currentIntervalMsRef.current = 30000; // reset backoff on success
+      currentIntervalMsRef.current = 60000; // reset backoff on success
     } catch (err: any) {
       if (err?.name === "CanceledError" || err?.name === "AbortError") return;
       console.error(err);
@@ -243,7 +244,9 @@ export default function ReceptionistBodySection() {
 
   const youtubeEmbedUrl = (url: string) => {
     const match = url.match(/(?:youtu\.be\/|youtube\.com\/watch\?v=)([\w-]+)/);
-    return match ? `https://www.youtube.com/embed/${match[1]}` : url;
+    return match
+      ? `https://www.youtube-nocookie.com/embed/${match[1]}?rel=0&modestbranding=1`
+      : url;
   };
 
   // Helper function to safely handle array/string fields

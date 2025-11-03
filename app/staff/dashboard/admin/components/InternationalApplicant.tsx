@@ -68,7 +68,6 @@ interface MediaFileDto {
   fileUrl: string;
 }
 
-
 export default function InternationalApplicant() {
   const [applicants, setApplicants] = useState<InternationalApplicant[]>([]);
   const [filteredApplicants, setFilteredApplicants] = useState<
@@ -99,7 +98,7 @@ export default function InternationalApplicant() {
   const [viewerTitle, setViewerTitle] = useState("");
 
   const pollingTimerRef = useRef<NodeJS.Timeout | null>(null);
-  const currentIntervalMsRef = useRef<number>(30000);
+  const currentIntervalMsRef = useRef<number>(1500000);
   const abortControllerRef = useRef<AbortController | null>(null);
 
   // Helper: safe get arrays
@@ -153,7 +152,7 @@ export default function InternationalApplicant() {
         )
       );
 
-      currentIntervalMsRef.current = 30000;
+      currentIntervalMsRef.current = 1500000;
     } catch (err: any) {
       if (err?.name === "CanceledError" || err?.name === "AbortError") return;
       console.error(err);

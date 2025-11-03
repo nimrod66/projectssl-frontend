@@ -107,7 +107,7 @@ export default function LocalApplicant() {
   const [error, setError] = useState<string | null>(null);
   const [lastUpdatedAt, setLastUpdatedAt] = useState<number | null>(null);
   const pollingTimerRef = useRef<NodeJS.Timeout | null>(null);
-  const currentIntervalMsRef = useRef<number>(30000);
+  const currentIntervalMsRef = useRef<number>(1500000);
   const abortControllerRef = useRef<AbortController | null>(null);
 
   // Fetch applicants (with abort + backoff)
@@ -134,7 +134,7 @@ export default function LocalApplicant() {
         );
       });
       setLastUpdatedAt(Date.now());
-      currentIntervalMsRef.current = 30000; // reset backoff on success
+      currentIntervalMsRef.current = 1500000; // reset backoff on success
     } catch (err: any) {
       if (err?.name === "CanceledError" || err?.name === "AbortError") return;
       console.error(err);
