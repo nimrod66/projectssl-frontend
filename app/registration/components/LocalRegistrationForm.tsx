@@ -166,492 +166,749 @@ export default function SslLocalRegistrationForm() {
 
   // Styling helpers
   const inputClass = (name: string) =>
-    `input input-bordered w-full ${
-      errors[name] ? "input-error border-red-500" : ""
-    }`;
+    `w-full px-4 py-2.5 rounded-lg border text-gray-900 placeholder-gray-400 
+  transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-purple-500 focus:border-transparent 
+  ${
+    errors[name as keyof typeof errors]
+      ? "border-red-400 bg-red-50 focus:ring-red-500 placeholder-red-400"
+      : "border-gray-400 bg-gray-50 hover:border-purple-400 focus:bg-white"
+  }`;
+
   const selectClass = (name: string) =>
-    `select select-bordered w-full ${errors[name] ? "border-red-500" : ""}`;
+    `w-full px-4 py-2.5 rounded-lg border text-gray-900 placeholder-gray-600 
+  transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-purple-500 focus:border-transparent cursor-pointer 
+  ${
+    errors[name as keyof typeof errors]
+      ? "border-red-400 bg-red-50 focus:ring-red-500"
+      : "border-gray-400 bg-gray-50 hover:border-purple-400 focus:bg-white"
+  }`;
+
   const errorText = (name: string) =>
-    errors[name] ? (
-      <p className="mt-1 text-xs text-red-600">{errors[name]}</p>
+    errors[name as keyof typeof errors] ? (
+      <span className="flex items-center gap-1 text-red-600 text-xs font-semibold mt-1.5 bg-white bg-opacity-90 px-2 py-0.5 rounded-md shadow-sm z-10">
+        <svg
+          className="w-3.5 h-3.5 flex-shrink-0"
+          fill="currentColor"
+          viewBox="0 0 20 20"
+        >
+          <path
+            fillRule="evenodd"
+            d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7 4a1 1 0 11-2 0 1 1 0 012 0zm-1-9a1 1 0 00-1 1v4a1 1 0 102 0V6a1 1 0 00-1-1z"
+            clipRule="evenodd"
+          />
+        </svg>
+        <span className="whitespace-pre-wrap leading-tight">
+          {errors[name as keyof typeof errors]}
+        </span>
+      </span>
     ) : null;
 
   return (
-    <div className="min-h-[85vh] flex items-start md:items-center justify-center px-4 py-10 bg-gradient-to-br from-purple-50 to-yellow-50">
-      <div className="w-full max-w-xl">
+    <div className="min-h-screen flex items-start justify-center px-4 py-8 bg-gradient-to-br from-purple-50 via-white to-yellow-50">
+      <div className="w-full max-w-2xl">
         {/* Card */}
-        <div className="bg-white border border-gray-200 rounded-2xl shadow-sm overflow-hidden">
-          {/* Header */}
-          <div className="px-6 py-5 bg-gradient-to-r from-purple-600 to-purple-700 text-white">
-            <h1 className="text-2xl font-bold">Application Registration</h1>
-            <p className="text-white/80 text-sm">
-              Please fill in your details accurately
-            </p>
+        <div className="bg-white rounded-3xl shadow-xl overflow-hidden border border-purple-100">
+          {/* Header with decorative elements */}
+          <div className="relative px-8 py-8 bg-gradient-to-br from-purple-600 via-purple-700 to-purple-800 text-white overflow-hidden">
+            <div className="absolute top-0 right-0 w-64 h-64 bg-yellow-400 rounded-full opacity-10 -mr-32 -mt-32"></div>
+            <div className="absolute bottom-0 left-0 w-48 h-48 bg-white rounded-full opacity-5 -ml-24 -mb-24"></div>
+            <div className="relative">
+              <div className="inline-flex items-center justify-center w-16 h-16 bg-white/20 rounded-full mb-4">
+                <svg
+                  className="w-8 h-8 text-white"
+                  fill="none"
+                  stroke="currentColor"
+                  viewBox="0 0 24 24"
+                >
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    strokeWidth={2}
+                    d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"
+                  />
+                </svg>
+              </div>
+              <h1 className="text-3xl font-bold mb-2">
+                Local Application Registration
+              </h1>
+              <p className="text-purple-100 text-sm">
+                Please fill in your details accurately to complete your
+                application
+              </p>
+            </div>
           </div>
 
-          {/* JSON Form - single column */}
-          <form onSubmit={handleJsonSubmit} className="px-6 py-6 space-y-4">
-            <div>
-              <label className="sr-only" htmlFor="firstName">
-                First Name
-              </label>
-              <input
-                id="firstName"
-                name="firstName"
-                type="text"
-                placeholder="First name"
-                className={inputClass("firstName")}
-              />
-              {errorText("firstName")}
-            </div>
-            <div>
-              <label className="sr-only" htmlFor="middleName">
-                Middle Name
-              </label>
-              <input
-                id="middleName"
-                name="middleName"
-                type="text"
-                placeholder="Middle name (optional)"
-                className="input input-bordered w-full"
-              />
-            </div>
-            <div>
-              <label className="sr-only" htmlFor="lastName">
-                Last Name
-              </label>
-              <input
-                id="lastName"
-                name="lastName"
-                type="text"
-                placeholder="Last name"
-                className={inputClass("lastName")}
-              />
-              {errorText("lastName")}
-            </div>
-            <div>
-              <label className="sr-only" htmlFor="phoneNumber">
-                Phone Number
-              </label>
-              <input
-                id="phoneNumber"
-                name="phoneNumber"
-                type="tel"
-                placeholder="Phone number"
-                className={inputClass("phoneNumber")}
-              />
-              {errorText("phoneNumber")}
-            </div>
-            <div>
-              <label className="sr-only" htmlFor="email">
-                Email
-              </label>
-              <input
-                id="email"
-                name="email"
-                type="email"
-                placeholder="Email"
-                className={inputClass("email")}
-              />
-              {errorText("email")}
-            </div>
-            <div>
-              <label className="sr-only" htmlFor="dob">
-                Date of Birth
-              </label>
-              <input
-                id="dob"
-                name="dob"
-                type="date"
-                placeholder="DOB"
-                className={inputClass("dob")}
-              />
-              {errorText("dob")}
-            </div>
-            <div>
-              <label className="sr-only" htmlFor="nationality">
-                Nationality
-              </label>
-              <input
-                id="nationality"
-                name="nationality"
-                type="text"
-                placeholder="Nationality"
-                className={inputClass("nationality")}
-              />
-              {errorText("nationality")}
-            </div>
-            <div>
-              <label className="sr-only" htmlFor="experience">
-                Experience
-              </label>
-              <input
-                id="experience"
-                name="experience"
-                type="text"
-                placeholder="Experience (e.g. 3 years housekeeping)"
-                className="input input-bordered w-full"
-              />
-            </div>
-            <div>
-              <label className="sr-only" htmlFor="currentSalary">
-                Current Salary
-              </label>
-              <input
-                id="currentSalary"
-                name="currentSalary"
-                type="text"
-                placeholder="Current salary"
-                className="input input-bordered w-full"
-              />
-            </div>
-            <div>
-              <label className="sr-only" htmlFor="currentProfession">
-                Current Profession
-              </label>
-              <input
-                id="currentProfession"
-                name="currentProfession"
-                type="text"
-                placeholder="Current profession"
-                className="input input-bordered w-full"
-              />
-            </div>
-            <div>
-              <label className="sr-only" htmlFor="currentLocation">
-                Current Location
-              </label>
-              <input
-                id="currentLocation"
-                name="currentLocation"
-                type="text"
-                placeholder="Current location"
-                className="input input-bordered w-full"
-              />
-            </div>
-            <div>
-              <label className="sr-only" htmlFor="employmentStatus">
-                Employment Status
-              </label>
-              <select
-                id="employmentStatus"
-                name="employmentStatus"
-                defaultValue=""
-                className={selectClass("employmentStatus")}
-              >
-                <option disabled value="">
-                  Employment status
-                </option>
-                <option value="EMPLOYED">Employed</option>
-                <option value="NOT_EMPLOYED">Unemployed</option>
-              </select>
-              {errorText("employmentStatus")}
-            </div>
-            <div>
-              <label className="sr-only" htmlFor="jobInterest">
-                Job Interest
-              </label>
-              <select
-                id="jobInterest"
-                name="jobInterest"
-                defaultValue=""
-                className={selectClass("jobInterest")}
-              >
-                <option disabled value="">
-                  Job interest
-                </option>
-                <option value="LOCAL_JOBS">Local Jobs</option>
-                <option value="INTERNATIONAL_JOBS">International Jobs</option>
-              </select>
-              {errorText("jobInterest")}
-            </div>
-            <div>
-              <span className="block text-sm font-medium text-gray-700 mb-1">
-                Languages
-              </span>
-              <div className="flex flex-wrap gap-3 p-3 rounded-lg border border-gray-200">
-                <label className="flex items-center gap-2 text-sm text-gray-700">
-                  <input
-                    type="checkbox"
-                    name="languages"
-                    value="ENGLISH"
-                    className="checkbox checkbox-primary checkbox-sm"
-                  />
-                  English
-                </label>
-                <label className="flex items-center gap-2 text-sm text-gray-700">
-                  <input
-                    type="checkbox"
-                    name="languages"
-                    value="KISWAHILI"
-                    className="checkbox checkbox-primary checkbox-sm"
-                  />
-                  Kiswahili
-                </label>
-                <label className="flex items-center gap-2 text-sm text-gray-700">
-                  <input
-                    type="checkbox"
-                    name="languages"
-                    value="ARABIC"
-                    className="checkbox checkbox-primary checkbox-sm"
-                  />
-                  Arabic
-                </label>
-              </div>
-              {/* Skills Section */}
-              <div>
-                <span className="block text-sm font-medium text-gray-700 mb-1">
-                  Skills & Specialities
+          {/* Form */}
+          <form onSubmit={handleJsonSubmit} className="px-8 py-8">
+            {/* Personal Information Section */}
+            <div className="mb-8">
+              <h2 className="text-xl font-semibold text-gray-800 mb-1 flex items-center gap-2">
+                <span className="w-8 h-8 bg-purple-100 text-purple-700 rounded-full flex items-center justify-center text-sm font-bold">
+                  1
                 </span>
-                {/*Elderly Care or Special Needs, Babies Older than 1 year or Younger than 1 year*/}
-                <div className="flex flex-wrap gap-3 p-3 rounded-lg border border-gray-200">
-                  <label className="flex items-center gap-2 text-sm text-gray-700">
+                Personal Information
+              </h2>
+              <p className="text-sm text-gray-500 mb-5 ml-10">
+                Basic details about yourself
+              </p>
+
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <div>
+                  <label
+                    className="block text-sm font-medium text-gray-700 mb-2"
+                    htmlFor="firstName"
+                  >
+                    First Name <span className="text-red-500">*</span>
+                  </label>
+                  <input
+                    id="firstName"
+                    name="firstName"
+                    type="text"
+                    placeholder="Enter your first name"
+                    className={inputClass("firstName")}
+                  />
+                  {errorText("firstName")}
+                </div>
+
+                <div>
+                  <label
+                    className="block text-sm font-medium text-gray-700 mb-2"
+                    htmlFor="middleName"
+                  >
+                    Middle Name
+                  </label>
+                  <input
+                    id="middleName"
+                    name="middleName"
+                    type="text"
+                    placeholder="Enter your middle name"
+                    className={inputClass("middleName")}
+                  />
+                </div>
+
+                <div>
+                  <label
+                    className="block text-sm font-medium text-gray-700 mb-2"
+                    htmlFor="lastName"
+                  >
+                    Last Name <span className="text-red-500">*</span>
+                  </label>
+                  <input
+                    id="lastName"
+                    name="lastName"
+                    type="text"
+                    placeholder="Enter your last name"
+                    className={inputClass("lastName")}
+                  />
+                  {errorText("lastName")}
+                </div>
+
+                <div>
+                  <label
+                    className="block text-sm font-medium text-gray-700 mb-2"
+                    htmlFor="dob"
+                  >
+                    Date of Birth <span className="text-red-500">*</span>
+                  </label>
+                  <input
+                    id="dob"
+                    name="dob"
+                    type="date"
+                    className={inputClass("dob")}
+                  />
+                  {errorText("dob")}
+                </div>
+
+                <div>
+                  <label
+                    className="block text-sm font-medium text-gray-700 mb-2"
+                    htmlFor="nationality"
+                  >
+                    Nationality <span className="text-red-500">*</span>
+                  </label>
+                  <input
+                    id="nationality"
+                    name="nationality"
+                    type="text"
+                    placeholder="Enter your nationality"
+                    className={inputClass("nationality")}
+                  />
+                  {errorText("nationality")}
+                </div>
+              </div>
+            </div>
+
+            {/* Contact Information Section */}
+            <div className="mb-8">
+              <h2 className="text-xl font-semibold text-gray-800 mb-1 flex items-center gap-2">
+                <span className="w-8 h-8 bg-purple-100 text-purple-700 rounded-full flex items-center justify-center text-sm font-bold">
+                  2
+                </span>
+                Contact Information
+              </h2>
+              <p className="text-sm text-gray-500 mb-5 ml-10">
+                How can we reach you?
+              </p>
+
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <div>
+                  <label
+                    className="block text-sm font-medium text-gray-700 mb-2"
+                    htmlFor="phoneNumber"
+                  >
+                    Phone Number <span className="text-red-500">*</span>
+                  </label>
+                  <input
+                    id="phoneNumber"
+                    name="phoneNumber"
+                    type="tel"
+                    placeholder="+254 700 000 000"
+                    className={inputClass("phoneNumber")}
+                  />
+                  {errorText("phoneNumber")}
+                </div>
+
+                <div>
+                  <label
+                    className="block text-sm font-medium text-gray-700 mb-2"
+                    htmlFor="email"
+                  >
+                    Email Address <span className="text-red-500">*</span>
+                  </label>
+                  <input
+                    id="email"
+                    name="email"
+                    type="email"
+                    placeholder="your.email@example.com"
+                    className={inputClass("email")}
+                  />
+                  {errorText("email")}
+                </div>
+
+                <div className="md:col-span-2">
+                  <label
+                    className="block text-sm font-medium text-gray-700 mb-2"
+                    htmlFor="currentLocation"
+                  >
+                    Current Location
+                  </label>
+                  <input
+                    id="currentLocation"
+                    name="currentLocation"
+                    type="text"
+                    placeholder="e.g., Nairobi"
+                    className={inputClass("currentLocation")}
+                  />
+                </div>
+              </div>
+            </div>
+
+            {/* Professional Information Section */}
+            <div className="mb-8">
+              <h2 className="text-xl font-semibold text-gray-800 mb-1 flex items-center gap-2">
+                <span className="w-8 h-8 bg-purple-100 text-purple-700 rounded-full flex items-center justify-center text-sm font-bold">
+                  3
+                </span>
+                Professional Background
+              </h2>
+              <p className="text-sm text-gray-500 mb-5 ml-10">
+                Tell us about your experience
+              </p>
+
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <div>
+                  <label
+                    className="block text-sm font-medium text-gray-700 mb-2"
+                    htmlFor="currentProfession"
+                  >
+                    Current Profession
+                  </label>
+                  <input
+                    id="currentProfession"
+                    name="currentProfession"
+                    type="text"
+                    placeholder="e.g., Housekeeper"
+                    className={inputClass("currentProfession")}
+                  />
+                </div>
+
+                <div>
+                  <label
+                    className="block text-sm font-medium text-gray-700 mb-2"
+                    htmlFor="experience"
+                  >
+                    Years of Experience
+                  </label>
+                  <input
+                    id="experience"
+                    name="experience"
+                    type="text"
+                    placeholder="e.g., 3 years housekeeping"
+                    className={inputClass("experience")}
+                  />
+                </div>
+
+                <div>
+                  <label
+                    className="block text-sm font-medium text-gray-700 mb-2"
+                    htmlFor="currentSalary"
+                  >
+                    Current Salary
+                  </label>
+                  <input
+                    id="currentSalary"
+                    name="currentSalary"
+                    type="text"
+                    placeholder="Enter amount"
+                    className={inputClass("currentSalary")}
+                  />
+                </div>
+
+                <div>
+                  <label
+                    className="block text-sm font-medium text-gray-700 mb-2"
+                    htmlFor="employmentStatus"
+                  >
+                    Employment Status <span className="text-red-500">*</span>
+                  </label>
+                  <select
+                    id="employmentStatus"
+                    name="employmentStatus"
+                    defaultValue=""
+                    className={selectClass("employmentStatus")}
+                  >
+                    <option disabled value="">
+                      Select status
+                    </option>
+                    <option value="EMPLOYED">Employed</option>
+                    <option value="NOT_EMPLOYED">Unemployed</option>
+                  </select>
+                  {errorText("employmentStatus")}
+                </div>
+
+                <div className="md:col-span-2">
+                  <label
+                    className="block text-sm font-medium text-gray-700 mb-2"
+                    htmlFor="jobInterest"
+                  >
+                    Job Interest <span className="text-red-500">*</span>
+                  </label>
+                  <select
+                    id="jobInterest"
+                    name="jobInterest"
+                    defaultValue=""
+                    className={selectClass("jobInterest")}
+                  >
+                    <option disabled value="">
+                      Select your preference
+                    </option>
+                    <option value="LOCAL_JOBS">Local Jobs</option>
+                    <option value="INTERNATIONAL_JOBS">
+                      International Jobs
+                    </option>
+                  </select>
+                  {errorText("jobInterest")}
+                </div>
+              </div>
+            </div>
+
+            {/* Languages Section */}
+            <div className="mb-8">
+              <h2 className="text-xl font-semibold text-gray-800 mb-1 flex items-center gap-2">
+                <span className="w-8 h-8 bg-purple-100 text-purple-700 rounded-full flex items-center justify-center text-sm font-bold">
+                  4
+                </span>
+                Languages
+              </h2>
+              <p className="text-sm text-gray-500 mb-5 ml-10">
+                Select all languages you speak
+              </p>
+
+              <div className="bg-gradient-to-br from-purple-50 to-white p-6 rounded-xl border border-purple-100">
+                <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
+                  <label className="flex items-center gap-3 p-4 bg-white rounded-lg border-2 border-gray-200 hover:border-purple-300 cursor-pointer transition-all duration-200">
+                    <input
+                      type="checkbox"
+                      name="languages"
+                      value="ENGLISH"
+                      className="w-5 h-5 text-purple-600 rounded focus:ring-2 focus:ring-purple-500"
+                    />
+                    <span className="text-sm font-medium text-gray-700">
+                      English
+                    </span>
+                  </label>
+                  <label className="flex items-center gap-3 p-4 bg-white rounded-lg border-2 border-gray-200 hover:border-purple-300 cursor-pointer transition-all duration-200">
+                    <input
+                      type="checkbox"
+                      name="languages"
+                      value="KISWAHILI"
+                      className="w-5 h-5 text-purple-600 rounded focus:ring-2 focus:ring-purple-500"
+                    />
+                    <span className="text-sm font-medium text-gray-700">
+                      Kiswahili
+                    </span>
+                  </label>
+                  <label className="flex items-center gap-3 p-4 bg-white rounded-lg border-2 border-gray-200 hover:border-purple-300 cursor-pointer transition-all duration-200">
+                    <input
+                      type="checkbox"
+                      name="languages"
+                      value="ARABIC"
+                      className="w-5 h-5 text-purple-600 rounded focus:ring-2 focus:ring-purple-500"
+                    />
+                    <span className="text-sm font-medium text-gray-700">
+                      Arabic
+                    </span>
+                  </label>
+                </div>
+              </div>
+            </div>
+
+            {/* Skills & Specialities Section */}
+            <div className="mb-8">
+              <h2 className="text-xl font-semibold text-gray-800 mb-1 flex items-center gap-2">
+                <span className="w-8 h-8 bg-purple-100 text-purple-700 rounded-full flex items-center justify-center text-sm font-bold">
+                  5
+                </span>
+                Skills & Specialities
+              </h2>
+              <p className="text-sm text-gray-500 mb-5 ml-10">
+                Select all areas where you have experience
+              </p>
+
+              <div className="bg-gradient-to-br from-yellow-50 to-white p-6 rounded-xl border border-yellow-100">
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                  <label className="flex items-center gap-3 p-4 bg-white rounded-lg border-2 border-gray-200 hover:border-yellow-300 cursor-pointer transition-all duration-200">
                     <input
                       type="checkbox"
                       name="elderlyCare"
                       value="true"
-                      className="checkbox checkbox-primary checkbox-sm"
+                      className="w-5 h-5 text-yellow-500 rounded focus:ring-2 focus:ring-yellow-400"
                     />
-                    Elderly Care
+                    <span className="text-sm font-medium text-gray-700">
+                      Elderly Care
+                    </span>
                   </label>
-                  <label className="flex items-center gap-2 text-sm text-gray-700">
+                  <label className="flex items-center gap-3 p-4 bg-white rounded-lg border-2 border-gray-200 hover:border-yellow-300 cursor-pointer transition-all duration-200">
                     <input
                       type="checkbox"
                       name="specialNeeds"
                       value="true"
-                      className="checkbox checkbox-primary checkbox-sm"
+                      className="w-5 h-5 text-yellow-500 rounded focus:ring-2 focus:ring-yellow-400"
                     />
-                    Special Needs
+                    <span className="text-sm font-medium text-gray-700">
+                      Special Needs
+                    </span>
                   </label>
-                  <label className="flex items-center gap-2 text-sm text-gray-700">
+                  <label className="flex items-center gap-3 p-4 bg-white rounded-lg border-2 border-gray-200 hover:border-yellow-300 cursor-pointer transition-all duration-200">
                     <input
                       type="checkbox"
                       name="olderThan1"
                       value="true"
-                      className="checkbox checkbox-primary checkbox-sm"
+                      className="w-5 h-5 text-yellow-500 rounded focus:ring-2 focus:ring-yellow-400"
                     />
-                    Babies older than 1 year
+                    <span className="text-sm font-medium text-gray-700">
+                      Babies older than 1 year
+                    </span>
                   </label>
-                  <label className="flex items-center gap-2 text-sm text-gray-700">
+                  <label className="flex items-center gap-3 p-4 bg-white rounded-lg border-2 border-gray-200 hover:border-yellow-300 cursor-pointer transition-all duration-200">
                     <input
                       type="checkbox"
                       name="youngerThan1"
                       value="true"
-                      className="checkbox checkbox-primary checkbox-sm"
+                      className="w-5 h-5 text-yellow-500 rounded focus:ring-2 focus:ring-yellow-400"
                     />
-                    Babies younger than 1 year
+                    <span className="text-sm font-medium text-gray-700">
+                      Babies younger than 1 year
+                    </span>
                   </label>
                 </div>
               </div>
+            </div>
 
-              {/* Other Booleans Section */}
-              <div>
-                <span className="block text-sm font-medium text-gray-700 mb-1">
-                  Additional Preferences
+            {/* Additional Preferences Section */}
+            <div className="mb-8">
+              <h2 className="text-xl font-semibold text-gray-800 mb-1 flex items-center gap-2">
+                <span className="w-8 h-8 bg-purple-100 text-purple-700 rounded-full flex items-center justify-center text-sm font-bold">
+                  6
                 </span>
-                {/*Does the employer have the following animals */}
-                <div className="flex flex-wrap gap-3 p-3 rounded-lg border border-gray-200">
-                  <label className="flex items-center gap-2 text-sm text-gray-700">
+                Additional Preferences
+              </h2>
+              <p className="text-sm text-gray-500 mb-5 ml-10">
+                Your workplace preferences
+              </p>
+
+              <div className="bg-gradient-to-br from-purple-50 to-white p-6 rounded-xl border border-purple-100">
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                  <label className="flex items-center gap-3 p-4 bg-white rounded-lg border-2 border-gray-200 hover:border-purple-300 cursor-pointer transition-all duration-200">
                     <input
                       type="checkbox"
                       name="hasCat"
                       value="true"
-                      className="checkbox checkbox-primary checkbox-sm"
+                      className="w-5 h-5 text-purple-600 rounded focus:ring-2 focus:ring-purple-500"
                     />
-                    Cats
+                    <span className="text-sm font-medium text-gray-700">
+                      Comfortable with Cats
+                    </span>
                   </label>
-                  <label className="flex items-center gap-2 text-sm text-gray-700">
+                  <label className="flex items-center gap-3 p-4 bg-white rounded-lg border-2 border-gray-200 hover:border-purple-300 cursor-pointer transition-all duration-200">
                     <input
                       type="checkbox"
                       name="hasDog"
                       value="true"
-                      className="checkbox checkbox-primary checkbox-sm"
+                      className="w-5 h-5 text-purple-600 rounded focus:ring-2 focus:ring-purple-500"
                     />
-                    Dogs
+                    <span className="text-sm font-medium text-gray-700">
+                      Comfortable with Dogs
+                    </span>
                   </label>
-                  <label className="flex items-center gap-2 text-sm text-gray-700">
+                  <label className="flex items-center gap-3 p-4 bg-white rounded-lg border-2 border-gray-200 hover:border-purple-300 cursor-pointer transition-all duration-200">
                     <input
                       type="checkbox"
                       name="extraPay"
                       value="true"
-                      className="checkbox checkbox-primary checkbox-sm"
+                      className="w-5 h-5 text-purple-600 rounded focus:ring-2 focus:ring-purple-500"
                     />
-                    Extra Pay for Overtime
+                    <span className="text-sm font-medium text-gray-700">
+                      Extra Pay for Overtime
+                    </span>
                   </label>
-                  <label className="flex items-center gap-2 text-sm text-gray-700">
+                  <label className="flex items-center gap-3 p-4 bg-white rounded-lg border-2 border-gray-200 hover:border-purple-300 cursor-pointer transition-all duration-200">
                     <input
                       type="checkbox"
                       name="liveOut"
                       value="true"
-                      className="checkbox checkbox-primary checkbox-sm"
+                      className="w-5 h-5 text-purple-600 rounded focus:ring-2 focus:ring-purple-500"
                     />
-                    Live Out
+                    <span className="text-sm font-medium text-gray-700">
+                      Live Out
+                    </span>
                   </label>
-                  <label className="flex items-center gap-2 text-sm text-gray-700">
+                  <label className="flex items-center gap-3 p-4 bg-white rounded-lg border-2 border-gray-200 hover:border-purple-300 cursor-pointer transition-all duration-200 sm:col-span-2">
                     <input
                       type="checkbox"
                       name="privateRoom"
                       value="true"
-                      className="checkbox checkbox-primary checkbox-sm"
+                      className="w-5 h-5 text-purple-600 rounded focus:ring-2 focus:ring-purple-500"
                     />
-                    Private Maid Room
+                    <span className="text-sm font-medium text-gray-700">
+                      Private Maid Room
+                    </span>
                   </label>
                 </div>
               </div>
             </div>
-            {/* File Upload Section */}
-            <div className="pt-4">
-              <h2 className="text-lg font-semibold text-purple-800">
-                Upload Files
+
+            {/* Document Upload Section */}
+            <div className="mb-8">
+              <h2 className="text-xl font-semibold text-gray-800 mb-1 flex items-center gap-2">
+                <span className="w-8 h-8 bg-purple-100 text-purple-700 rounded-full flex items-center justify-center text-sm font-bold">
+                  7
+                </span>
+                Required Documents
               </h2>
-              <p className="text-sm text-gray-600">
-                Attach your photos and resume to complete your application.
+              <p className="text-sm text-gray-500 mb-5 ml-10">
+                Upload the following documents to complete your application
+              </p>
+
+              <div className="space-y-5">
+                {/* Passport Photo */}
+                <div className="bg-white p-5 rounded-xl border-2 border-dashed border-gray-200 hover:border-purple-300 transition-all duration-200">
+                  <div className="flex items-start justify-between mb-3">
+                    <div>
+                      <label
+                        htmlFor="passportPhoto"
+                        className="block text-sm font-semibold text-gray-800"
+                      >
+                        Passport Photo <span className="text-red-500">*</span>
+                      </label>
+                      <p className="text-xs text-gray-500 mt-1">
+                        Clear headshot photo (JPG, PNG)
+                      </p>
+                    </div>
+                  </div>
+                  <input
+                    id="passportPhoto"
+                    name="passportPhoto"
+                    type="file"
+                    accept="image/*"
+                    className="w-full text-sm text-gray-600 file:mr-4 file:py-2 file:px-4 file:rounded-lg file:border-0 file:text-sm file:font-semibold file:bg-purple-50 file:text-purple-700 hover:file:bg-purple-100 file:cursor-pointer cursor-pointer"
+                  />
+                  {errorText("passportPhoto")}
+                </div>
+
+                {/* Full Body Photo */}
+                <div className="bg-white p-5 rounded-xl border-2 border-dashed border-gray-200 hover:border-purple-300 transition-all duration-200">
+                  <div className="flex items-start justify-between mb-3">
+                    <div>
+                      <label
+                        htmlFor="fullBodyPhoto"
+                        className="block text-sm font-semibold text-gray-800"
+                      >
+                        Full Body Photo <span className="text-red-500">*</span>
+                      </label>
+                      <p className="text-xs text-gray-500 mt-1">
+                        Full-length photo (JPG, PNG)
+                      </p>
+                    </div>
+                  </div>
+                  <input
+                    id="fullBodyPhoto"
+                    name="fullBodyPhoto"
+                    type="file"
+                    accept="image/*"
+                    className="w-full text-sm text-gray-600 file:mr-4 file:py-2 file:px-4 file:rounded-lg file:border-0 file:text-sm file:font-semibold file:bg-purple-50 file:text-purple-700 hover:file:bg-purple-100 file:cursor-pointer cursor-pointer"
+                  />
+                  {errorText("fullBodyPhoto")}
+                </div>
+
+                {/* National ID */}
+                <div className="bg-white p-5 rounded-xl border-2 border-dashed border-gray-200 hover:border-purple-300 transition-all duration-200">
+                  <div className="flex items-start justify-between mb-3">
+                    <div>
+                      <label
+                        htmlFor="idPhoto"
+                        className="block text-sm font-semibold text-gray-800"
+                      >
+                        National ID (Both Sides){" "}
+                        <span className="text-red-500">*</span>
+                      </label>
+                      <p className="text-xs text-gray-500 mt-1">
+                        Front & back in one file (PDF, DOC, DOCX)
+                      </p>
+                    </div>
+                  </div>
+                  <input
+                    id="idPhoto"
+                    name="idPhoto"
+                    type="file"
+                    accept=".doc,.docx,.pdf"
+                    className="w-full text-sm text-gray-600 file:mr-4 file:py-2 file:px-4 file:rounded-lg file:border-0 file:text-sm file:font-semibold file:bg-purple-50 file:text-purple-700 hover:file:bg-purple-100 file:cursor-pointer cursor-pointer"
+                  />
+                  {errorText("idPhoto")}
+                </div>
+
+                {/* Resume */}
+                <div className="bg-white p-5 rounded-xl border-2 border-dashed border-gray-200 hover:border-purple-300 transition-all duration-200">
+                  <div className="flex items-start justify-between mb-3">
+                    <div>
+                      <label
+                        htmlFor="resume"
+                        className="block text-sm font-semibold text-gray-800"
+                      >
+                        Resume / CV <span className="text-red-500">*</span>
+                      </label>
+                      <p className="text-xs text-gray-500 mt-1">
+                        PDF, DOC, or DOCX format
+                      </p>
+                    </div>
+                  </div>
+                  <input
+                    id="resume"
+                    name="resume"
+                    type="file"
+                    accept=".doc,.docx,.pdf"
+                    className="w-full text-sm text-gray-600 file:mr-4 file:py-2 file:px-4 file:rounded-lg file:border-0 file:text-sm file:font-semibold file:bg-purple-50 file:text-purple-700 hover:file:bg-purple-100 file:cursor-pointer cursor-pointer"
+                  />
+                  {errorText("resume")}
+                </div>
+
+                {/* Birth Certificate */}
+                <div className="bg-white p-5 rounded-xl border-2 border-dashed border-gray-200 hover:border-purple-300 transition-all duration-200">
+                  <div className="flex items-start justify-between mb-3">
+                    <div>
+                      <label
+                        htmlFor="birthCertificate"
+                        className="block text-sm font-semibold text-gray-800"
+                      >
+                        Birth Certificate{" "}
+                        <span className="text-red-500">*</span>
+                      </label>
+                      <p className="text-xs text-gray-500 mt-1">
+                        PDF, DOC, or DOCX format
+                      </p>
+                    </div>
+                  </div>
+                  <input
+                    id="birthCertificate"
+                    name="birthCertificate"
+                    type="file"
+                    accept=".doc,.docx,.pdf"
+                    className="w-full text-sm text-gray-600 file:mr-4 file:py-2 file:px-4 file:rounded-lg file:border-0 file:text-sm file:font-semibold file:bg-purple-50 file:text-purple-700 hover:file:bg-purple-100 file:cursor-pointer cursor-pointer"
+                  />
+                  {errorText("birthCertificate")}
+                </div>
+
+                {/* Certificate of Good Conduct */}
+                <div className="bg-white p-5 rounded-xl border-2 border-dashed border-gray-200 hover:border-purple-300 transition-all duration-200">
+                  <div className="flex items-start justify-between mb-3">
+                    <div>
+                      <label
+                        htmlFor="goodConduct"
+                        className="block text-sm font-semibold text-gray-800"
+                      >
+                        Certificate of Good Conduct{" "}
+                        <span className="text-red-500">*</span>
+                      </label>
+                      <p className="text-xs text-gray-500 mt-1">
+                        PDF, DOC, or DOCX format
+                      </p>
+                    </div>
+                  </div>
+                  <input
+                    id="goodConduct"
+                    name="goodConduct"
+                    type="file"
+                    accept=".doc,.docx,.pdf"
+                    className="w-full text-sm text-gray-600 file:mr-4 file:py-2 file:px-4 file:rounded-lg file:border-0 file:text-sm file:font-semibold file:bg-purple-50 file:text-purple-700 hover:file:bg-purple-100 file:cursor-pointer cursor-pointer"
+                  />
+                  {errorText("goodConduct")}
+                </div>
+              </div>
+            </div>
+
+            {/* Submit Button */}
+            <div className="pt-6">
+              <button
+                type="submit"
+                className="w-full py-4 px-6 bg-gradient-to-r from-yellow-400 to-yellow-500 text-purple-800 font-bold text-lg rounded-xl shadow-lg hover:shadow-xl hover:from-yellow-500 hover:to-yellow-600 transform hover:-translate-y-0.5 transition-all duration-200 disabled:opacity-50 disabled:cursor-not-allowed disabled:transform-none"
+                disabled={loading}
+              >
+                {loading ? (
+                  <span className="flex items-center justify-center gap-2">
+                    <svg className="animate-spin h-5 w-5" viewBox="0 0 24 24">
+                      <circle
+                        className="opacity-25"
+                        cx="12"
+                        cy="12"
+                        r="10"
+                        stroke="currentColor"
+                        strokeWidth="4"
+                        fill="none"
+                      ></circle>
+                      <path
+                        className="opacity-75"
+                        fill="currentColor"
+                        d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"
+                      ></path>
+                    </svg>
+                    Submitting Application...
+                  </span>
+                ) : (
+                  "Submit Application"
+                )}
+              </button>
+              <p className="text-center text-xs text-gray-500 mt-3">
+                By submitting this form, you agree to our terms and conditions
               </p>
             </div>
-            {/* Passport Photo */}
-            <div className="form-control w-full">
-              <label htmlFor="passportPhoto" className="label">
-                <span className="label-text text-purple-800 font-medium">
-                  Passport Photo
-                </span>
-                <span className="label-text-alt text-gray-500">
-                  Clear headshot photo
-                </span>
-              </label>
-              <input
-                id="passportPhoto"
-                name="passportPhoto"
-                type="file"
-                accept="image/*"
-                className="file-input file-input-bordered w-full"
-              />
-              {errorText("passportPhoto")}
-            </div>
-
-            {/* Full Body Photo */}
-            <div className="form-control w-full mt-3">
-              <label htmlFor="fullBodyPhoto" className="label">
-                <span className="label-text text-purple-800 font-medium">
-                  Full Body Photo
-                </span>
-                <span className="label-text-alt text-gray-500">
-                  Full-length photo
-                </span>
-              </label>
-              <input
-                id="fullBodyPhoto"
-                name="fullBodyPhoto"
-                type="file"
-                accept="image/*"
-                className="file-input file-input-bordered w-full"
-              />
-              {errorText("fullBodyPhoto")}
-            </div>
-
-            {/* National ID */}
-            <div className="form-control w-full mt-3">
-              <label
-                className="flex flex-col lg:flex-row lg:items-center lg:gap-2"
-                htmlFor="idPhoto"
-              >
-                {" "}
-                <span className="label-text text-purple-800 font-medium">
-                  National ID (Both Sides)
-                </span>
-                <span className="label-text-alt text-gray-500">
-                  Front & back in one file.
-                </span>
-              </label>
-              <input
-                id="idPhoto"
-                name="idPhoto"
-                type="file"
-                accept="image/*"
-                className="file-input file-input-bordered w-full"
-              />
-              {errorText("idPhoto")}
-            </div>
-
-            {/* Resume */}
-            <div className="form-control w-full mt-3">
-              <label
-                className="flex flex-col lg:flex-row lg:items-center lg:gap-2"
-                htmlFor="resume"
-              >
-                <span className="label-text text-purple-800 font-medium">
-                  Resume / CV
-                </span>
-                <span className="label-text-alt text-gray-500">
-                  Accepted formats: PDF, DOC, DOCX
-                </span>
-              </label>
-              <input
-                id="resume"
-                name="resume"
-                type="file"
-                accept=".doc,.docx,.pdf"
-                className="file-input file-input-bordered w-full"
-              />
-              {errorText("resume")}
-            </div>
-            {/* Birth Certificate */}
-            <div className="form-control w-full mt-3">
-              <label
-                className="flex flex-col lg:flex-row lg:items-center lg:gap-2"
-                htmlFor="birthCertificate"
-              >
-                <span className="label-text text-purple-800 font-medium">
-                  Birth Certificate
-                </span>
-                <span className="label-text-alt text-gray-500">
-                  Accepted formats: PDF, DOC, DOCX
-                </span>
-              </label>
-              <input
-                id="birthCertificate"
-                name="birthCertificate"
-                type="file"
-                accept=".doc,.docx,.pdf"
-                className="file-input file-input-bordered w-full"
-              />
-              {errorText("birthCertificate")}
-            </div>
-
-            {/* Certificate of Good Conduct */}
-            <div className="form-control w-full mt-3">
-              <label
-                className="flex flex-col lg:flex-row lg:items-center lg:gap-2"
-                htmlFor="goodConduct"
-              >
-                {" "}
-                <span className="label-text text-purple-800 font-medium">
-                  Certificate of Good Conduct
-                </span>
-                <span className="label-text-alt text-gray-500">
-                  Accepted formats: PDF, DOC, DOCX
-                </span>
-              </label>
-              <input
-                id="goodConduct"
-                name="goodConduct"
-                type="file"
-                accept=".doc,.docx,.pdf"
-                className="file-input file-input-bordered w-full"
-              />
-              {errorText("goodConduct")}
-            </div>
-            <br></br>
-            <button
-              type="submit"
-              className="btn w-full bg-yellow-400 text-purple-800 hover:bg-yellow-500 font-semibold"
-              disabled={loading}
-            >
-              {loading ? "Submitting..." : "Submit Application"}
-            </button>
           </form>
         </div>
+
+        {/* Success/Error Message */}
         {message && (
-          <p className="text-center mt-4 text-sm text-gray-700">{message}</p>
+          <div className="mt-6 p-4 bg-green-50 border border-green-200 rounded-xl text-center">
+            <p className="text-green-700 font-medium">{message}</p>
+          </div>
         )}
       </div>
     </div>
