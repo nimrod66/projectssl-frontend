@@ -25,12 +25,7 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en" data-theme="dark">
-      <head>
-        <script
-          src="https://polyfill.io/v3/polyfill.min.js?features=es2015,es2016,es2017,fetch,IntersectionObserver"
-          defer
-        ></script>
-      </head>
+      <head></head>
       <body
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}
       >

@@ -39,9 +39,11 @@ export default function StaffLoginPage() {
       toast.success("Login successful");
 
       if (role === "SUPER_ADMIN") {
-        router.push("/staff/dashboard/control");
+        router.push("/staff/dashboard/admin");
       } else if (role === "ADMIN") {
         router.push("/staff/dashboard/admin");
+      } else if (role === "RECRUITMENT_OFFICER") {
+        router.push("/staff/dashboard/officer");
       } else {
         router.push("/staff/dashboard/receptionist");
       }
@@ -58,10 +60,10 @@ export default function StaffLoginPage() {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-purple-50 via-white to-yellow-50 flex items-center justify-center p-4">
+    <div className="min-h-screen bg-gradient-to-br from-indigo-50 via-white to-yellow-50 flex items-center justify-center p-4">
       {/* Background Decorative Elements */}
       <div className="absolute inset-0 overflow-hidden pointer-events-none">
-        <div className="absolute -top-40 -right-40 w-80 h-80 bg-purple-200 rounded-full mix-blend-multiply filter blur-xl opacity-30"></div>
+        <div className="absolute -top-40 -right-40 w-80 h-80 bg-indigo-200 rounded-full mix-blend-multiply filter blur-xl opacity-30"></div>
         <div className="absolute -bottom-40 -left-40 w-80 h-80 bg-yellow-200 rounded-full mix-blend-multiply filter blur-xl opacity-30"></div>
         <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-80 h-80 bg-pink-200 rounded-full mix-blend-multiply filter blur-xl opacity-30"></div>
       </div>
@@ -69,7 +71,7 @@ export default function StaffLoginPage() {
       <div className="w-full max-w-md relative z-10">
         {/* Logo / Title */}
         <div className="text-center mb-8">
-          <div className="inline-flex items-center justify-center w-16 h-16 bg-gradient-to-br from-purple-600 to-purple-700 rounded-2xl shadow-lg mb-4">
+          <div className="inline-flex items-center justify-center w-16 h-16 bg-gradient-to-br from-indigo-600 to-indigo-700 rounded-2xl shadow-lg mb-4">
             <Lock className="w-8 h-8 text-white" />
           </div>
           <h1 className="text-3xl font-bold text-gray-900 mb-2">
@@ -95,7 +97,7 @@ export default function StaffLoginPage() {
                     value={email}
                     onChange={(e) => setEmail(e.target.value)}
                     required
-                    className="block w-full pl-10 pr-3 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent transition duration-200 text-gray-900 placeholder-gray-400 outline-none"
+                    className="block w-full pl-10 pr-3 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-transparent transition duration-200 text-gray-900 placeholder-gray-400 outline-none"
                   />
                 </div>
               </div>
@@ -113,7 +115,7 @@ export default function StaffLoginPage() {
                     value={password}
                     onChange={(e) => setPassword(e.target.value)}
                     required
-                    className="block w-full pl-10 pr-10 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent transition duration-200 text-gray-900 placeholder-gray-400 outline-none"
+                    className="block w-full pl-10 pr-10 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-transparent transition duration-200 text-gray-900 placeholder-gray-400 outline-none"
                   />
                   <button
                     type="button"
@@ -151,7 +153,7 @@ export default function StaffLoginPage() {
               <button
                 type="submit"
                 disabled={loading}
-                className="w-full bg-gradient-to-r from-purple-600 to-purple-700 text-white py-3 px-4 rounded-lg font-semibold hover:from-purple-700 hover:to-purple-800 focus:outline-none focus:ring-2 focus:ring-purple-500 focus:ring-offset-2 transition duration-200 disabled:opacity-50 disabled:cursor-not-allowed shadow-lg hover:shadow-xl"
+                className="w-full bg-gradient-to-r from-indigo-600 to-indigo-700 text-white py-3 px-4 rounded-lg font-semibold hover:from-indigo-700 hover:to-indigo-800 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 transition duration-200 disabled:opacity-50 disabled:cursor-not-allowed shadow-lg hover:shadow-xl"
               >
                 {loading ? (
                   <span className="flex items-center justify-center">
@@ -190,7 +192,7 @@ export default function StaffLoginPage() {
               Don't have an account?{" "}
               <button
                 onClick={() => router.push("/staff/registration")}
-                className="font-medium text-purple-600 hover:text-purple-700 transition"
+                className="font-medium text-indigo-600 hover:text-indigo-700 transition"
               >
                 Register here
               </button>
@@ -198,7 +200,7 @@ export default function StaffLoginPage() {
             <p className="text-sm text-gray-600 mt-2">
               <button
                 onClick={() => router.push("/staff")}
-                className="font-medium text-purple-600 hover:text-purple-700 transition"
+                className="font-medium text-indigo-600 hover:text-indigo-700 transition"
               >
                 ← Back to homepage
               </button>

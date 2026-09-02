@@ -10,7 +10,7 @@ export default function PrivacyPage() {
     <main className="min-h-screen bg-gray-50">
       <div className="container mx-auto px-4 py-12 max-w-4xl">
         <div className="bg-white rounded-2xl shadow-sm ring-1 ring-gray-200 p-6 sm:p-8">
-          <h1 className="text-4xl font-bold text-purple-800 mb-6">
+          <h1 className="text-4xl font-bold text-indigo-800 mb-6">
             Privacy Policy
           </h1>
           <p className="text-gray-700 leading-relaxed mb-6">
@@ -19,7 +19,7 @@ export default function PrivacyPage() {
           </p>
 
           <section className="space-y-4 mb-8">
-            <h2 className="text-2xl font-semibold text-purple-700">
+            <h2 className="text-2xl font-semibold text-indigo-700">
               Information We Collect
             </h2>
             <ul className="list-disc pl-6 text-gray-700 space-y-2">
@@ -33,7 +33,7 @@ export default function PrivacyPage() {
           </section>
 
           <section className="space-y-4 mb-8">
-            <h2 className="text-2xl font-semibold text-purple-700">
+            <h2 className="text-2xl font-semibold text-indigo-700">
               How We Use Your Data
             </h2>
             <ul className="list-disc pl-6 text-gray-700 space-y-2">
@@ -45,7 +45,7 @@ export default function PrivacyPage() {
           </section>
 
           <section className="space-y-4 mb-8">
-            <h2 className="text-2xl font-semibold text-purple-700">
+            <h2 className="text-2xl font-semibold text-indigo-700">
               Data Sharing
             </h2>
             <p className="text-gray-700">
@@ -56,7 +56,7 @@ export default function PrivacyPage() {
           </section>
 
           <section className="space-y-4 mb-8">
-            <h2 className="text-2xl font-semibold text-purple-700">
+            <h2 className="text-2xl font-semibold text-indigo-700">
               Your Rights
             </h2>
             <ul className="list-disc pl-6 text-gray-700 space-y-2">
@@ -67,12 +67,12 @@ export default function PrivacyPage() {
           </section>
 
           <section className="space-y-4 mb-8">
-            <h2 className="text-2xl font-semibold text-purple-700">
+            <h2 className="text-2xl font-semibold text-indigo-700">
               Cookie Preferences
             </h2>
             <p className="text-gray-700">
               Manage your cookie preferences on our{" "}
-              <a href="/cookies" className="text-purple-700 underline">
+              <a href="/cookies" className="text-indigo-700 underline">
                 Cookies Settings
               </a>{" "}
               page.

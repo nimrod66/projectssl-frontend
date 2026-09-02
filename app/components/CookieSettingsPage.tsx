@@ -56,7 +56,7 @@ export default function CookiesSettingsPage() {
 
   return (
     <main className="container mx-auto px-4 py-12 max-w-3xl">
-      <h1 className="text-3xl font-bold text-purple-800 mb-6">
+      <h1 className="text-3xl font-bold text-indigo-800 mb-6">
         Cookie Settings
       </h1>
       <p className="text-gray-700 mb-6">
@@ -119,7 +119,7 @@ export default function CookiesSettingsPage() {
         <button
           onClick={save}
           disabled={!changed}
-          className="btn btn-primary bg-purple-600 hover:bg-purple-700 disabled:opacity-50"
+          className="btn btn-primary bg-indigo-600 hover:bg-indigo-700 disabled:opacity-50"
         >
           Save Preferences
         </button>

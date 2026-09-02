@@ -1,7 +1,8 @@
 "use client";
 
 import { X, ChevronLeft, ChevronRight, Download } from "lucide-react";
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
+import { withUploadToken } from "@/app/lib/uploads";
 
 interface ImageViewerModalProps {
   images: string[];
@@ -18,27 +19,25 @@ export default function ImageViewerModal({
 }: ImageViewerModalProps) {
   const [currentIndex, setCurrentIndex] = useState(initialIndex);
 
-  const handlePrevious = () => {
+  const handlePrevious = useCallback(() => {
     setCurrentIndex((prev) => (prev > 0 ? prev - 1 : images.length - 1));
-  };
+  }, [images.length]);
 
-  const API_BASE = process.env.NEXT_PUBLIC_API_BASE;
-
-  const handleNext = () => {
+  const handleNext = useCallback(() => {
     setCurrentIndex((prev) => (prev < images.length - 1 ? prev + 1 : 0));
-  };
+  }, [images.length]);
 
-  // Keyboard navigation
   useEffect(() => {
     const handleKeyDown = (e: KeyboardEvent) => {
       if (e.key === "ArrowLeft") handlePrevious();
       if (e.key === "ArrowRight") handleNext();
       if (e.key === "Escape") onClose();
     };
-
     window.addEventListener("keydown", handleKeyDown);
     return () => window.removeEventListener("keydown", handleKeyDown);
-  }, []);
+  }, [handlePrevious, handleNext, onClose]);
+
+  const API_BASE = process.env.NEXT_PUBLIC_API_BASE;
 
   return (
     <div
@@ -78,7 +77,7 @@ export default function ImageViewerModal({
         {/* Image Container */}
         <div className="flex-1 flex items-center justify-center relative">
           <img
-            src={`${API_BASE}${images[currentIndex]}`}
+            src={withUploadToken(`${API_BASE}${images[currentIndex]}`)}
             alt={`Image ${currentIndex + 1}`}
             className="max-w-full max-h-full object-contain rounded-lg"
           />
@@ -111,12 +110,12 @@ export default function ImageViewerModal({
                 onClick={() => setCurrentIndex(idx)}
                 className={`flex-shrink-0 w-16 h-16 rounded-lg overflow-hidden border-2 transition-all ${
                   idx === currentIndex
-                    ? "border-purple-500 scale-110"
+                    ? "border-indigo-500 scale-110"
                     : "border-transparent opacity-60 hover:opacity-100"
                 }`}
               >
                 <img
-                  src={img}
+                  src={withUploadToken(img)}
                   alt={`Thumbnail ${idx + 1}`}
                   className="w-full h-full object-cover"
                 />

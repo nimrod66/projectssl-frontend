@@ -1,87 +1,59 @@
 "use client";
-import { Canvas } from "@react-three/fiber";
-import { OrbitControls, Stars } from "@react-three/drei";
-import { useRef } from "react";
-import * as THREE from "three";
 
-function GlobeWithPlane() {
-  const groupRef = useRef<THREE.Group>(null);
-  const planeRef = useRef<THREE.Mesh>(null);
-
-  // Animate the plane orbiting the globe
-  useRef(() => {
-    let angle = 0;
-    const animate = () => {
-      requestAnimationFrame(animate);
-      angle += 0.01;
-      if (planeRef.current) {
-        planeRef.current.position.x = 2.5 * Math.cos(angle);
-        planeRef.current.position.z = 2.5 * Math.sin(angle);
-        planeRef.current.rotation.y = -angle;
-      }
-    };
-    animate();
-  }, []);
-
-  return (
-    <group ref={groupRef}>
-      {/* Globe */}
-      <mesh>
-        <sphereGeometry args={[2, 64, 64]} />
-        <meshStandardMaterial
-          map={new THREE.TextureLoader().load("/assets/globe-texture.jpg")}
-          metalness={0.4}
-          roughness={0.8}
-        />
-      </mesh>
-
-      {/* Airplane */}
-      <mesh ref={planeRef}>
-        <coneGeometry args={[0.1, 0.4, 8]} />
-        <meshStandardMaterial color="orange" />
-      </mesh>
-    </group>
-  );
-}
+import Link from "next/link";
 
 export default function Hero() {
   return (
-    <div className="hero min-h-[80vh] bg-gradient-to-r from-purple-600 to-purple-800 relative overflow-hidden flex items-center justify-center px-6 sm:px-10">
-      {/* Background Pattern */}
-      <div className="absolute inset-0 opacity-10">
-        <div className="absolute top-0 left-0 w-full h-full bg-[url('data:image/svg+xml,%3Csvg%20width%3D%2260%22%20height%3D%2260%22%20viewBox%3D%220%200%2060%2060%22%20xmlns%3D%22http%3A//www.w3.org/2000/svg%22%3E%3Cg%20fill%3D%22none%22%20fill-rule%3D%22evenodd%22%3E%3Cg%20fill%3D%22%23ffffff%22%20fill-opacity%3D%220.1%22%3E%3Ccircle%20cx%3D%2230%22%20cy%3D%2230%22%20r%3D%222%22/%3E%3C/g%3E%3C/g%3E%3C/svg%3E')]"></div>
+    <section className="relative overflow-hidden bg-gradient-to-br from-slate-900 via-slate-800 to-indigo-950">
+      <div className="absolute inset-0">
+        <div className="absolute -top-40 -right-40 w-[40rem] h-[40rem] bg-indigo-500/10 rounded-full blur-3xl" />
+        <div className="absolute -bottom-40 -left-40 w-[35rem] h-[35rem] bg-slate-500/5 rounded-full blur-3xl" />
       </div>
 
-      {/* Main Content */}
-      <div className="relative z-10 max-w-7xl mx-auto grid grid-cols-1 md:grid-cols-2 items-center gap-10">
-        {/* Left: 3D Globe */}
-        <div className="h-72 sm:h-96 lg:h-[28rem] w-full">
-          <Canvas camera={{ position: [0, 0, 6] }}>
-            <ambientLight intensity={0.6} />
-            <directionalLight position={[3, 2, 5]} intensity={1.2} />
-            <Stars radius={50} depth={20} count={4000} factor={4} fade />
-            <GlobeWithPlane />
-            <OrbitControls
-              enableZoom={false}
-              autoRotate
-              autoRotateSpeed={0.5}
-            />
-          </Canvas>
-        </div>
+      <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-20 sm:py-28 lg:py-36">
+        <div className="max-w-3xl">
+          <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-white/5 border border-white/10 text-slate-300 text-sm mb-6 animate-fade-up">
+            <span className="w-2 h-2 rounded-full bg-emerald-400 animate-pulse" />
+            Now accepting applications
+          </div>
 
-        {/* Right: Agency Text */}
-        <div className="text-white text-center md:text-left">
-          <h1 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-bold mb-4 sm:mb-6 leading-tight">
-            SSL Recruitment Agency
+          <h1 className="text-4xl sm:text-5xl lg:text-6xl font-extrabold text-white leading-[1.05] mb-6 animate-fade-up delay-100">
+            Your Bridge to <span className="text-indigo-300">Global Opportunity</span>
           </h1>
-          <p className="text-base sm:text-lg lg:text-xl opacity-90">
-            We are a premier international recruitment agency dedicated to
-            bridging the gap between exceptional global talent and the world’s
-            leading organizations. Our mission is to connect people and
-            opportunities across borders — making dreams take flight.
+
+          <p className="text-lg sm:text-xl text-slate-300 max-w-2xl mb-8 leading-relaxed animate-fade-up delay-200">
+            SSL Agency connects skilled professionals with leading employers worldwide.
+            From domestic placements to international contracts — simple, safe, and fast.
           </p>
+
+          <div className="flex flex-wrap gap-3 animate-fade-up delay-300">
+            <Link href="/opportunities"
+              className="inline-flex items-center gap-2 px-6 py-3.5 bg-indigo-600 hover:bg-indigo-500 text-white font-semibold rounded-xl transition-all duration-200 shadow-lg shadow-indigo-600/20 hover:shadow-indigo-500/30 hover:-translate-y-0.5">
+              Browse Opportunities
+              <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 8l4 4m0 0l-4 4m4-4H3" /></svg>
+            </Link>
+            <Link href="/registration"
+              className="inline-flex items-center gap-2 px-6 py-3.5 bg-white/5 hover:bg-white/10 text-white font-semibold rounded-xl border border-white/10 transition-all duration-200 hover:-translate-y-0.5">
+              Apply as Candidate
+            </Link>
+            <Link href="/employers"
+              className="inline-flex items-center gap-2 px-6 py-3.5 text-slate-400 hover:text-white font-semibold rounded-xl transition-colors">
+              I'm an Employer
+            </Link>
+          </div>
+
+          <div className="mt-14 flex flex-wrap items-center gap-x-8 gap-y-4 text-sm text-slate-400 animate-fade-up delay-500">
+            {["Background Verified", "Professionally Trained", "Global Placements"].map((t, i) => (
+              <div key={i} className="flex items-center gap-2">
+                <svg className="w-5 h-5 text-emerald-400 shrink-0" fill="currentColor" viewBox="0 0 20 20">
+                  <path fillRule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clipRule="evenodd" />
+                </svg>
+                {t}
+              </div>
+            ))}
+          </div>
         </div>
       </div>
-    </div>
+    </section>
   );
 }

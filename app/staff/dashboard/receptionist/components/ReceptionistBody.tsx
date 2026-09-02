@@ -2,6 +2,7 @@
 
 import { useEffect, useRef, useState } from "react";
 import api from "@/app/staff/auth/api";
+import { withUploadToken } from "@/app/lib/uploads";
 import { getYouTubeEmbedUrl } from "../../admin/components/utils/youtubeUtils";
 
 import {
@@ -65,15 +66,15 @@ interface InternationalApplicants {
   age?: number;
   nationality?: string;
   religion?: string;
-  maritalStatus?: number;
+  maritalStatus?: string;
   numberOfKids?: string;
-  educationLevel?: string | string[];
+  educationLevel?: string;
   currentProfession?: string;
   currentSalary?: number;
   currentLocation?: string;
   languages?: string[];
   employmentStatus?: string;
-  jobRecruitment?: string | string[];
+  jobRecruitment?: string;
   status: "PENDING" | "VETTED" | "APPROVED" | "REJECTED";
   createdAt?: string;
   updatedAt?: string;
@@ -259,13 +260,13 @@ export default function ReceptionistBodySection() {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-purple-50 via-white to-yellow-50">
+    <div className="min-h-screen bg-gradient-to-br from-indigo-50 via-white to-yellow-50">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6 lg:py-8">
         {/* Header Section */}
-        <div className="bg-white rounded-2xl shadow-sm border border-purple-100/50 p-6 lg:p-8 mb-6">
+        <div className="bg-white rounded-2xl shadow-sm border border-indigo-100/50 p-6 lg:p-8 mb-6">
           <div className="flex flex-col lg:flex-row lg:items-center lg:justify-between gap-6">
             <div className="space-y-1">
-              <h1 className="text-3xl lg:text-4xl font-bold bg-gradient-to-r from-purple-700 to-purple-900 bg-clip-text text-transparent">
+              <h1 className="text-3xl lg:text-4xl font-bold bg-gradient-to-r from-indigo-700 to-indigo-900 bg-clip-text text-transparent">
                 Receptionist Portal
               </h1>
               <p className="text-gray-600 text-sm lg:text-base">
@@ -281,14 +282,14 @@ export default function ReceptionistBodySection() {
                   placeholder="Search applicants..."
                   value={searchInput}
                   onChange={(e) => setSearchInput(e.target.value)}
-                  className="pl-10 pr-4 py-2.5 border border-gray-200 rounded-xl focus:ring-2 focus:ring-purple-500 focus:border-transparent w-full sm:w-72 text-sm transition-all"
+                  className="pl-10 pr-4 py-2.5 border border-gray-200 rounded-xl focus:ring-2 focus:ring-indigo-500 focus:border-transparent w-full sm:w-72 text-sm transition-all"
                 />
               </div>
 
               <select
                 value={statusFilter}
                 onChange={(e) => setStatusFilter(e.target.value)}
-                className="px-4 py-2.5 border border-gray-200 rounded-xl focus:ring-2 focus:ring-purple-500 focus:border-transparent text-sm bg-white transition-all cursor-pointer"
+                className="px-4 py-2.5 border border-gray-200 rounded-xl focus:ring-2 focus:ring-indigo-500 focus:border-transparent text-sm bg-white transition-all cursor-pointer"
               >
                 <option value="ALL">All Status</option>
                 <option value="PENDING">Pending</option>
@@ -300,7 +301,7 @@ export default function ReceptionistBodySection() {
               <button
                 onClick={() => fetchApplicants()}
                 disabled={loading}
-                className="inline-flex items-center justify-center gap-2 px-5 py-2.5 rounded-xl bg-purple-600 hover:bg-purple-700 text-white text-sm font-medium transition-all disabled:opacity-50 disabled:cursor-not-allowed shadow-sm hover:shadow-md"
+                className="inline-flex items-center justify-center gap-2 px-5 py-2.5 rounded-xl bg-indigo-600 hover:bg-indigo-700 text-white text-sm font-medium transition-all disabled:opacity-50 disabled:cursor-not-allowed shadow-sm hover:shadow-md"
               >
                 <RefreshCw
                   className={`w-4 h-4 ${loading ? "animate-spin" : ""}`}
@@ -320,23 +321,23 @@ export default function ReceptionistBodySection() {
         </div>
 
         {/* Tabs Section */}
-        <div className="bg-white rounded-2xl shadow-sm border border-purple-100/50 mb-6 overflow-hidden">
+        <div className="bg-white rounded-2xl shadow-sm border border-indigo-100/50 mb-6 overflow-hidden">
           <div className="flex border-b border-gray-100">
             <button
               onClick={() => setActiveTab("LOCAL")}
               className={`flex-1 px-6 py-4 font-semibold text-sm transition-all relative ${
                 activeTab === "LOCAL"
-                  ? "text-purple-700 bg-purple-50/50"
+                  ? "text-indigo-700 bg-indigo-50/50"
                   : "text-gray-600 hover:bg-gray-50"
               }`}
             >
               {activeTab === "LOCAL" && (
-                <div className="absolute bottom-0 left-0 right-0 h-0.5 bg-purple-600" />
+                <div className="absolute bottom-0 left-0 right-0 h-0.5 bg-indigo-600" />
               )}
               <div className="flex items-center justify-center gap-2">
                 <User className="w-4 h-4" />
                 <span>Local Applicants</span>
-                <span className="inline-flex items-center justify-center min-w-[24px] h-6 px-2 rounded-full bg-purple-100 text-purple-700 text-xs font-bold">
+                <span className="inline-flex items-center justify-center min-w-[24px] h-6 px-2 rounded-full bg-indigo-100 text-indigo-700 text-xs font-bold">
                   {filteredDomestic.length}
                 </span>
               </div>
@@ -346,17 +347,17 @@ export default function ReceptionistBodySection() {
               onClick={() => setActiveTab("INTERNATIONAL")}
               className={`flex-1 px-6 py-4 font-semibold text-sm transition-all relative ${
                 activeTab === "INTERNATIONAL"
-                  ? "text-purple-700 bg-purple-50/50"
+                  ? "text-indigo-700 bg-indigo-50/50"
                   : "text-gray-600 hover:bg-gray-50"
               }`}
             >
               {activeTab === "INTERNATIONAL" && (
-                <div className="absolute bottom-0 left-0 right-0 h-0.5 bg-purple-600" />
+                <div className="absolute bottom-0 left-0 right-0 h-0.5 bg-indigo-600" />
               )}
               <div className="flex items-center justify-center gap-2">
                 <Globe className="w-4 h-4" />
                 <span>International</span>
-                <span className="inline-flex items-center justify-center min-w-[24px] h-6 px-2 rounded-full bg-purple-100 text-purple-700 text-xs font-bold">
+                <span className="inline-flex items-center justify-center min-w-[24px] h-6 px-2 rounded-full bg-indigo-100 text-indigo-700 text-xs font-bold">
                   {filteredInternational.length}
                 </span>
               </div>
@@ -368,7 +369,7 @@ export default function ReceptionistBodySection() {
         {loading && displayedApplicants.length === 0 && (
           <div className="flex items-center justify-center py-20">
             <div className="flex flex-col items-center gap-4">
-              <div className="h-12 w-12 rounded-full border-4 border-purple-200 border-t-purple-600 animate-spin" />
+              <div className="h-12 w-12 rounded-full border-4 border-indigo-200 border-t-indigo-600 animate-spin" />
               <p className="text-gray-600 font-medium">Loading applicants...</p>
             </div>
           </div>
@@ -399,14 +400,14 @@ export default function ReceptionistBodySection() {
 
         {/* Empty State */}
         {!loading && !error && displayedApplicants.length === 0 && (
-          <div className="bg-purple-50 border border-purple-200 rounded-2xl p-8 text-center">
-            <div className="inline-flex items-center justify-center w-16 h-16 rounded-full bg-purple-100 mb-4">
-              <Users className="w-8 h-8 text-purple-600" />
+          <div className="bg-indigo-50 border border-indigo-200 rounded-2xl p-8 text-center">
+            <div className="inline-flex items-center justify-center w-16 h-16 rounded-full bg-indigo-100 mb-4">
+              <Users className="w-8 h-8 text-indigo-600" />
             </div>
-            <h3 className="font-semibold text-purple-900 mb-2">
+            <h3 className="font-semibold text-indigo-900 mb-2">
               No applicants found
             </h3>
-            <p className="text-sm text-purple-700">
+            <p className="text-sm text-indigo-700">
               Try adjusting your search or filter criteria
             </p>
           </div>
@@ -417,17 +418,17 @@ export default function ReceptionistBodySection() {
           {displayedApplicants.map((applicant) => (
             <div
               key={applicant.id}
-              className="bg-white rounded-2xl shadow-sm border border-gray-100 hover:shadow-md hover:border-purple-200 transition-all cursor-pointer overflow-hidden group"
+              className="bg-white rounded-2xl shadow-sm border border-gray-100 hover:shadow-md hover:border-indigo-200 transition-all cursor-pointer overflow-hidden group"
               onClick={() => setSelectedApplicant(applicant)}
             >
               <div className="p-6">
                 <div className="flex items-start justify-between gap-4">
                   <div className="flex items-start gap-4 flex-1 min-w-0">
-                    <div className="flex-shrink-0 w-14 h-14 bg-gradient-to-br from-purple-100 to-purple-50 rounded-xl flex items-center justify-center group-hover:scale-105 transition-transform">
+                    <div className="flex-shrink-0 w-14 h-14 bg-gradient-to-br from-indigo-100 to-indigo-50 rounded-xl flex items-center justify-center group-hover:scale-105 transition-transform">
                       {activeTab === "LOCAL" ? (
-                        <User className="w-7 h-7 text-purple-600" />
+                        <User className="w-7 h-7 text-indigo-600" />
                       ) : (
-                        <Globe className="w-7 h-7 text-purple-600" />
+                        <Globe className="w-7 h-7 text-indigo-600" />
                       )}
                     </div>
 
@@ -499,7 +500,7 @@ export default function ReceptionistBodySection() {
           <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 backdrop-blur-sm p-4 overflow-y-auto">
             <div className="bg-white rounded-2xl shadow-2xl w-full max-w-5xl my-8 animate-in fade-in zoom-in duration-200">
               <div className="sticky top-0 bg-white border-b border-gray-100 px-6 py-4 rounded-t-2xl flex items-center justify-between z-10">
-                <h2 className="text-2xl font-bold text-purple-800">
+                <h2 className="text-2xl font-bold text-indigo-800">
                   Applicant Details
                 </h2>
                 <button
@@ -512,17 +513,17 @@ export default function ReceptionistBodySection() {
 
               <div className="p-6 space-y-6 max-h-[calc(100vh-200px)] overflow-y-auto">
                 {/* Basic Info Card */}
-                <div className="bg-gradient-to-br from-purple-50 to-purple-100/50 rounded-xl p-6 border border-purple-200">
-                  <h3 className="text-2xl font-bold text-purple-900 mb-4">
+                <div className="bg-gradient-to-br from-indigo-50 to-indigo-100/50 rounded-xl p-6 border border-indigo-200">
+                  <h3 className="text-2xl font-bold text-indigo-900 mb-4">
                     {selectedApplicant.fullName}
                   </h3>
 
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                     <div className="space-y-3">
                       <div className="flex items-start gap-3">
-                        <Mail className="w-5 h-5 text-purple-600 flex-shrink-0 mt-0.5" />
+                        <Mail className="w-5 h-5 text-indigo-600 flex-shrink-0 mt-0.5" />
                         <div>
-                          <p className="text-xs text-purple-700 font-medium mb-0.5">
+                          <p className="text-xs text-indigo-700 font-medium mb-0.5">
                             Email
                           </p>
                           <p className="text-sm text-gray-900">
@@ -532,9 +533,9 @@ export default function ReceptionistBodySection() {
                       </div>
 
                       <div className="flex items-start gap-3">
-                        <Phone className="w-5 h-5 text-purple-600 flex-shrink-0 mt-0.5" />
+                        <Phone className="w-5 h-5 text-indigo-600 flex-shrink-0 mt-0.5" />
                         <div>
-                          <p className="text-xs text-purple-700 font-medium mb-0.5">
+                          <p className="text-xs text-indigo-700 font-medium mb-0.5">
                             Phone
                           </p>
                           <p className="text-sm text-gray-900">
@@ -545,9 +546,9 @@ export default function ReceptionistBodySection() {
 
                       {selectedApplicant.dob && (
                         <div className="flex items-start gap-3">
-                          <Calendar className="w-5 h-5 text-purple-600 flex-shrink-0 mt-0.5" />
+                          <Calendar className="w-5 h-5 text-indigo-600 flex-shrink-0 mt-0.5" />
                           <div>
-                            <p className="text-xs text-purple-700 font-medium mb-0.5">
+                            <p className="text-xs text-indigo-700 font-medium mb-0.5">
                               Date of Birth
                             </p>
                             <p className="text-sm text-gray-900">
@@ -559,9 +560,9 @@ export default function ReceptionistBodySection() {
 
                       {selectedApplicant.currentLocation && (
                         <div className="flex items-start gap-3">
-                          <MapPin className="w-5 h-5 text-purple-600 flex-shrink-0 mt-0.5" />
+                          <MapPin className="w-5 h-5 text-indigo-600 flex-shrink-0 mt-0.5" />
                           <div>
-                            <p className="text-xs text-purple-700 font-medium mb-0.5">
+                            <p className="text-xs text-indigo-700 font-medium mb-0.5">
                               Location
                             </p>
                             <p className="text-sm text-gray-900">
@@ -575,9 +576,9 @@ export default function ReceptionistBodySection() {
                     <div className="space-y-3">
                       {selectedApplicant.nationality && (
                         <div className="flex items-start gap-3">
-                          <Globe className="w-5 h-5 text-purple-600 flex-shrink-0 mt-0.5" />
+                          <Globe className="w-5 h-5 text-indigo-600 flex-shrink-0 mt-0.5" />
                           <div>
-                            <p className="text-xs text-purple-700 font-medium mb-0.5">
+                            <p className="text-xs text-indigo-700 font-medium mb-0.5">
                               Nationality
                             </p>
                             <p className="text-sm text-gray-900">
@@ -589,9 +590,9 @@ export default function ReceptionistBodySection() {
 
                       {selectedApplicant.currentProfession && (
                         <div className="flex items-start gap-3">
-                          <Briefcase className="w-5 h-5 text-purple-600 flex-shrink-0 mt-0.5" />
+                          <Briefcase className="w-5 h-5 text-indigo-600 flex-shrink-0 mt-0.5" />
                           <div>
-                            <p className="text-xs text-purple-700 font-medium mb-0.5">
+                            <p className="text-xs text-indigo-700 font-medium mb-0.5">
                               Profession
                             </p>
                             <p className="text-sm text-gray-900">
@@ -604,9 +605,9 @@ export default function ReceptionistBodySection() {
                       {"experience" in selectedApplicant &&
                         selectedApplicant.experience && (
                           <div className="flex items-start gap-3">
-                            <Clock className="w-5 h-5 text-purple-600 flex-shrink-0 mt-0.5" />
+                            <Clock className="w-5 h-5 text-indigo-600 flex-shrink-0 mt-0.5" />
                             <div>
-                              <p className="text-xs text-purple-700 font-medium mb-0.5">
+                              <p className="text-xs text-indigo-700 font-medium mb-0.5">
                                 Experience
                               </p>
                               <p className="text-sm text-gray-900">
@@ -619,9 +620,9 @@ export default function ReceptionistBodySection() {
                       {"educationLevel" in selectedApplicant &&
                         selectedApplicant.educationLevel && (
                           <div className="flex items-start gap-3">
-                            <FileText className="w-5 h-5 text-purple-600 flex-shrink-0 mt-0.5" />
+                            <FileText className="w-5 h-5 text-indigo-600 flex-shrink-0 mt-0.5" />
                             <div>
-                              <p className="text-xs text-purple-700 font-medium mb-0.5">
+                              <p className="text-xs text-indigo-700 font-medium mb-0.5">
                                 Education Level
                               </p>
                               <p className="text-sm text-gray-900">
@@ -636,9 +637,9 @@ export default function ReceptionistBodySection() {
                       {"religion" in selectedApplicant &&
                         selectedApplicant.religion && (
                           <div className="flex items-start gap-3">
-                            <User className="w-5 h-5 text-purple-600 flex-shrink-0 mt-0.5" />
+                            <User className="w-5 h-5 text-indigo-600 flex-shrink-0 mt-0.5" />
                             <div>
-                              <p className="text-xs text-purple-700 font-medium mb-0.5">
+                              <p className="text-xs text-indigo-700 font-medium mb-0.5">
                                 Religion
                               </p>
                               <p className="text-sm text-gray-900">
@@ -651,9 +652,9 @@ export default function ReceptionistBodySection() {
                       {"maritalStatus" in selectedApplicant &&
                         selectedApplicant.maritalStatus && (
                           <div className="flex items-start gap-3">
-                            <User className="w-5 h-5 text-purple-600 flex-shrink-0 mt-0.5" />
+                            <User className="w-5 h-5 text-indigo-600 flex-shrink-0 mt-0.5" />
                             <div>
-                              <p className="text-xs text-purple-700 font-medium mb-0.5">
+                              <p className="text-xs text-indigo-700 font-medium mb-0.5">
                                 Marital Status
                               </p>
                               <p className="text-sm text-gray-900">
@@ -666,9 +667,9 @@ export default function ReceptionistBodySection() {
                       {"numberOfKids" in selectedApplicant &&
                         selectedApplicant.numberOfKids && (
                           <div className="flex items-start gap-3">
-                            <User className="w-5 h-5 text-purple-600 flex-shrink-0 mt-0.5" />
+                            <User className="w-5 h-5 text-indigo-600 flex-shrink-0 mt-0.5" />
                             <div>
-                              <p className="text-xs text-purple-700 font-medium mb-0.5">
+                              <p className="text-xs text-indigo-700 font-medium mb-0.5">
                                 Number of Kids
                               </p>
                               <p className="text-sm text-gray-900">
@@ -680,9 +681,9 @@ export default function ReceptionistBodySection() {
 
                       {selectedApplicant.currentSalary && (
                         <div className="flex items-start gap-3">
-                          <DollarSign className="w-5 h-5 text-purple-600 flex-shrink-0 mt-0.5" />
+                          <DollarSign className="w-5 h-5 text-indigo-600 flex-shrink-0 mt-0.5" />
                           <div>
-                            <p className="text-xs text-purple-700 font-medium mb-0.5">
+                            <p className="text-xs text-indigo-700 font-medium mb-0.5">
                               Current Salary
                             </p>
                             <p className="text-sm text-gray-900">
@@ -698,11 +699,11 @@ export default function ReceptionistBodySection() {
                   {selectedApplicant.languages &&
                     Array.isArray(selectedApplicant.languages) &&
                     selectedApplicant.languages.length > 0 && (
-                      <div className="mt-4 pt-4 border-t border-purple-200">
+                      <div className="mt-4 pt-4 border-t border-indigo-200">
                         <div className="flex items-start gap-3">
-                          <Languages className="w-5 h-5 text-purple-600 flex-shrink-0 mt-0.5" />
+                          <Languages className="w-5 h-5 text-indigo-600 flex-shrink-0 mt-0.5" />
                           <div>
-                            <p className="text-xs text-purple-700 font-medium mb-2">
+                            <p className="text-xs text-indigo-700 font-medium mb-2">
                               Languages
                             </p>
                             <div className="flex flex-wrap gap-2">
@@ -710,13 +711,13 @@ export default function ReceptionistBodySection() {
                                 selectedApplicant.languages.map((lang, idx) => (
                                   <span
                                     key={idx}
-                                    className="px-3 py-1 bg-white border border-purple-200 rounded-full text-xs font-medium text-purple-700"
+                                    className="px-3 py-1 bg-white border border-indigo-200 rounded-full text-xs font-medium text-indigo-700"
                                   >
                                     {lang}
                                   </span>
                                 ))
                               ) : (
-                                <span className="px-3 py-1 bg-white border border-purple-200 rounded-full text-xs font-medium text-purple-700">
+                                <span className="px-3 py-1 bg-white border border-indigo-200 rounded-full text-xs font-medium text-indigo-700">
                                   {String(selectedApplicant.languages)}
                                 </span>
                               )}
@@ -726,7 +727,7 @@ export default function ReceptionistBodySection() {
                       </div>
                     )}
 
-                  <div className="mt-4 pt-4 border-t border-purple-200">
+                  <div className="mt-4 pt-4 border-t border-indigo-200">
                     <span
                       className={`inline-flex items-center gap-2 px-4 py-2 rounded-lg border font-semibold text-sm ${getStatusBadge(
                         selectedApplicant.status
@@ -807,7 +808,7 @@ export default function ReceptionistBodySection() {
                           {group.files?.map((file, idx) => {
                             const fullUrl = file.startsWith("http")
                               ? file
-                              : `${API_BASE}${file}`;
+                              : withUploadToken(`${API_BASE}${file}`);
                             const isPdf = file.endsWith(".pdf");
                             const isVideo = group.label === "Videos";
 
@@ -840,24 +841,24 @@ export default function ReceptionistBodySection() {
                                     });
                                   }
                                 }}
-                                className="group relative bg-white border-2 border-gray-200 hover:border-purple-400 rounded-xl p-4 transition-all hover:shadow-md"
+                                className="group relative bg-white border-2 border-gray-200 hover:border-indigo-400 rounded-xl p-4 transition-all hover:shadow-md"
                               >
                                 <div className="flex flex-col items-center gap-2">
-                                  <div className="w-12 h-12 bg-purple-50 rounded-lg flex items-center justify-center group-hover:bg-purple-100 transition-colors">
+                                  <div className="w-12 h-12 bg-indigo-50 rounded-lg flex items-center justify-center group-hover:bg-indigo-100 transition-colors">
                                     {isPdf ? (
-                                      <FileText className="w-6 h-6 text-purple-600" />
+                                      <FileText className="w-6 h-6 text-indigo-600" />
                                     ) : isVideo ? (
-                                      <Video className="w-6 h-6 text-purple-600" />
+                                      <Video className="w-6 h-6 text-indigo-600" />
                                     ) : (
-                                      <ImageIcon className="w-6 h-6 text-purple-600" />
+                                      <ImageIcon className="w-6 h-6 text-indigo-600" />
                                     )}
                                   </div>
                                   <div className="text-xs font-medium text-gray-700 text-center">
                                     {group.label} {idx + 1}
                                   </div>
                                 </div>
-                                <div className="absolute inset-0 flex items-center justify-center bg-purple-600/0 group-hover:bg-purple-600/10 rounded-xl transition-colors">
-                                  <Eye className="w-5 h-5 text-purple-600 opacity-0 group-hover:opacity-100 transition-opacity" />
+                                <div className="absolute inset-0 flex items-center justify-center bg-indigo-600/0 group-hover:bg-indigo-600/10 rounded-xl transition-colors">
+                                  <Eye className="w-5 h-5 text-indigo-600 opacity-0 group-hover:opacity-100 transition-opacity" />
                                 </div>
                               </button>
                             );

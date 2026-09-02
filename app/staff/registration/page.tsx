@@ -96,10 +96,10 @@ export default function StaffRegistrationPage() {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-purple-50 via-white to-yellow-50 flex items-center justify-center p-4 py-12">
+    <div className="min-h-screen bg-gradient-to-br from-indigo-50 via-white to-yellow-50 flex items-center justify-center p-4 py-12">
       {/* Background decorative elements */}
       <div className="absolute inset-0 overflow-hidden pointer-events-none">
-        <div className="absolute -top-40 -right-40 w-80 h-80 bg-purple-200 rounded-full mix-blend-multiply filter blur-xl opacity-30"></div>
+        <div className="absolute -top-40 -right-40 w-80 h-80 bg-indigo-200 rounded-full mix-blend-multiply filter blur-xl opacity-30"></div>
         <div className="absolute -bottom-40 -left-40 w-80 h-80 bg-yellow-200 rounded-full mix-blend-multiply filter blur-xl opacity-30"></div>
         <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-80 h-80 bg-pink-200 rounded-full mix-blend-multiply filter blur-xl opacity-30"></div>
       </div>
@@ -107,7 +107,7 @@ export default function StaffRegistrationPage() {
       <div className="w-full max-w-2xl relative z-10">
         {/* Logo/Brand Section */}
         <div className="text-center mb-8">
-          <div className="inline-flex items-center justify-center w-16 h-16 bg-gradient-to-br from-purple-600 to-purple-700 rounded-2xl shadow-lg mb-4">
+          <div className="inline-flex items-center justify-center w-16 h-16 bg-gradient-to-br from-indigo-600 to-indigo-700 rounded-2xl shadow-lg mb-4">
             <UserPlus className="w-8 h-8 text-white" />
           </div>
           <h1 className="text-3xl font-bold text-gray-900 mb-2">
@@ -136,7 +136,7 @@ export default function StaffRegistrationPage() {
                     placeholder="John"
                     value={form.firstName}
                     onChange={handleChange}
-                    className="block w-full pl-10 pr-3 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent text-gray-900 placeholder-gray-400 outline-none"
+                    className="block w-full pl-10 pr-3 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-transparent text-gray-900 placeholder-gray-400 outline-none"
                     required
                   />
                 </div>
@@ -157,7 +157,7 @@ export default function StaffRegistrationPage() {
                     placeholder="Doe"
                     value={form.lastName}
                     onChange={handleChange}
-                    className="block w-full pl-10 pr-3 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent text-gray-900 placeholder-gray-400 outline-none"
+                    className="block w-full pl-10 pr-3 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-transparent text-gray-900 placeholder-gray-400 outline-none"
                     required
                   />
                 </div>
@@ -179,7 +179,7 @@ export default function StaffRegistrationPage() {
                   placeholder="john.doe@example.com"
                   value={form.email}
                   onChange={handleChange}
-                  className="block w-full pl-10 pr-3 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent text-gray-900 placeholder-gray-400 outline-none"
+                  className="block w-full pl-10 pr-3 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-transparent text-gray-900 placeholder-gray-400 outline-none"
                   required
                 />
               </div>
@@ -202,7 +202,7 @@ export default function StaffRegistrationPage() {
                     placeholder="+254 701 234 567"
                     value={form.phoneNumber}
                     onChange={handleChange}
-                    className="block w-full pl-10 pr-3 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent text-gray-900 placeholder-gray-400 outline-none"
+                    className="block w-full pl-10 pr-3 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-transparent text-gray-900 placeholder-gray-400 outline-none"
                     required
                   />
                 </div>
@@ -221,9 +221,10 @@ export default function StaffRegistrationPage() {
                     name="role"
                     value={form.role}
                     onChange={handleChange}
-                    className="block w-full pl-10 pr-3 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent text-gray-900 appearance-none bg-white cursor-pointer"
+                    className="block w-full pl-10 pr-3 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-transparent text-gray-900 appearance-none bg-white cursor-pointer"
                   >
-                    <option value="ADMIN">Administrator</option>
+                    <option value="ADMIN">Operations Manager</option>
+                    <option value="RECRUITMENT_OFFICER">Recruitment Officer</option>
                     <option value="RECEPTIONIST">Receptionist</option>
                   </select>
                   <div className="absolute inset-y-0 right-0 pr-3 flex items-center pointer-events-none">
@@ -260,7 +261,7 @@ export default function StaffRegistrationPage() {
                   placeholder="Create a strong password"
                   value={form.password}
                   onChange={handleChange}
-                  className="block w-full pl-10 pr-10 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent text-gray-900 placeholder-gray-400 outline-none"
+                  className="block w-full pl-10 pr-10 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-transparent text-gray-900 placeholder-gray-400 outline-none"
                   required
                 />
                 <button
@@ -292,7 +293,7 @@ export default function StaffRegistrationPage() {
                   placeholder="Re-enter your password"
                   value={form.confirmPassword}
                   onChange={handleChange}
-                  className="block w-full pl-10 pr-10 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent text-gray-900 placeholder-gray-400 outline-none"
+                  className="block w-full pl-10 pr-10 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-transparent text-gray-900 placeholder-gray-400 outline-none"
                   required
                 />
                 <button
@@ -331,7 +332,7 @@ export default function StaffRegistrationPage() {
             <button
               type="submit"
               disabled={loading}
-              className="w-full bg-gradient-to-r from-purple-600 to-purple-700 text-white py-3 px-4 rounded-lg font-semibold hover:from-purple-700 hover:to-purple-800 focus:outline-none focus:ring-2 focus:ring-purple-500 focus:ring-offset-2 transition duration-200 disabled:opacity-50 disabled:cursor-not-allowed shadow-lg hover:shadow-xl"
+              className="w-full bg-gradient-to-r from-indigo-600 to-indigo-700 text-white py-3 px-4 rounded-lg font-semibold hover:from-indigo-700 hover:to-indigo-800 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 transition duration-200 disabled:opacity-50 disabled:cursor-not-allowed shadow-lg hover:shadow-xl"
             >
               {loading ? (
                 <span className="flex items-center justify-center">
@@ -369,7 +370,7 @@ export default function StaffRegistrationPage() {
               Already have an account?{" "}
               <button
                 onClick={() => router.push("/staff/login")}
-                className="font-medium text-purple-600 hover:text-purple-700 transition"
+                className="font-medium text-indigo-600 hover:text-indigo-700 transition"
               >
                 Login here
               </button>
@@ -377,7 +378,7 @@ export default function StaffRegistrationPage() {
             <p className="mt-2">
               <button
                 onClick={() => router.push("/")}
-                className="font-medium text-purple-600 hover:text-purple-700 transition"
+                className="font-medium text-indigo-600 hover:text-indigo-700 transition"
               >
                 ← Back to homepage
               </button>

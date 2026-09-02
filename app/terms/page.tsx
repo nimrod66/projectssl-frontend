@@ -10,11 +10,11 @@ export default function TermsPage() {
     <main className="min-h-screen bg-gray-50">
       <div className="container mx-auto px-4 py-12 max-w-4xl">
         <div className="bg-white rounded-2xl shadow-sm ring-1 ring-gray-200 p-6 sm:p-8">
-          <h1 className="text-4xl font-bold text-purple-800 mb-6">
+          <h1 className="text-4xl font-bold text-indigo-800 mb-6">
             Terms & Conditions
           </h1>
           <section className="space-y-4 mb-8">
-            <h2 className="text-2xl font-semibold text-purple-700">
+            <h2 className="text-2xl font-semibold text-indigo-700">
               1. Acceptance of Terms
             </h2>
             <p className="text-gray-700">
@@ -22,7 +22,7 @@ export default function TermsPage() {
             </p>
           </section>
           <section className="space-y-4 mb-8">
-            <h2 className="text-2xl font-semibold text-purple-700">
+            <h2 className="text-2xl font-semibold text-indigo-700">
               2. User Obligations
             </h2>
             <p className="text-gray-700">
@@ -30,7 +30,7 @@ export default function TermsPage() {
             </p>
           </section>
           <section className="space-y-4 mb-8">
-            <h2 className="text-2xl font-semibold text-purple-700">
+            <h2 className="text-2xl font-semibold text-indigo-700">
               3. Content & Media
             </h2>
             <p className="text-gray-700">
@@ -39,19 +39,19 @@ export default function TermsPage() {
             </p>
           </section>
           <section className="space-y-4 mb-8">
-            <h2 className="text-2xl font-semibold text-purple-700">
+            <h2 className="text-2xl font-semibold text-indigo-700">
               4. Privacy
             </h2>
             <p className="text-gray-700">
               See our{" "}
-              <a href="/privacy" className="underline text-purple-700">
+              <a href="/privacy" className="underline text-indigo-700">
                 Privacy Policy
               </a>{" "}
               for data practices.
             </p>
           </section>
           <section className="space-y-4 mb-8">
-            <h2 className="text-2xl font-semibold text-purple-700">
+            <h2 className="text-2xl font-semibold text-indigo-700">
               5. Liability
             </h2>
             <p className="text-gray-700">
@@ -60,7 +60,7 @@ export default function TermsPage() {
             </p>
           </section>
           <section className="space-y-4">
-            <h2 className="text-2xl font-semibold text-purple-700">
+            <h2 className="text-2xl font-semibold text-indigo-700">
               6. Changes
             </h2>
             <p className="text-gray-700">

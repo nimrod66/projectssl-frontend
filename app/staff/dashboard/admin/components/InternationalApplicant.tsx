@@ -4,6 +4,7 @@ import { useEffect, useRef, useState } from "react";
 import api from "@/app/staff/auth/api";
 import GenerateCVButton from "../../receptionist/components/GenerateCVButton";
 import ImageViewerModal from "./ImageViewerModal";
+import { withUploadToken } from "@/app/lib/uploads";
 import { getYouTubeEmbedUrl } from "./utils/youtubeUtils";
 import toast from "react-hot-toast";
 import {
@@ -268,20 +269,19 @@ export default function InternationalApplicant() {
       const formData = new FormData();
       formData.append("files", pendingShowcaseFile); // must match @RequestPart("files")
 
-      const res = await api.post<MediaFileDto>(
+      const res = await api.post<MediaFileDto[]>(
         `/api/media/inter/${applicantId}/showcase`,
         formData,
         { headers: { "Content-Type": "multipart/form-data" } }
       );
 
-      // Update local state with new file URL
-      const newUrl = res.data.fileUrl;
+      const uploadedUrls = res.data.map((f: any) => f.fileUrl).filter(Boolean);
       setApplicants((prev) =>
         prev.map((app) =>
           app.id === applicantId
             ? {
                 ...ensureArrays(app),
-                showcase: [...(app.showcasePhotos ?? []), newUrl],
+                showcasePhotos: [...(app.showcasePhotos ?? []), ...uploadedUrls],
               }
             : app
         )
@@ -290,7 +290,7 @@ export default function InternationalApplicant() {
         prev
           ? {
               ...ensureArrays(prev),
-              showcase: [...(prev.showcasePhotos ?? []), newUrl],
+              showcasePhotos: [...(prev.showcasePhotos ?? []), ...uploadedUrls],
             }
           : prev
       );
@@ -454,19 +454,19 @@ export default function InternationalApplicant() {
       case "PENDING":
         return "bg-yellow-100 text-yellow-800 border-yellow-200";
       case "HIRED":
-        return "bg-purple-100 text-purple-800 border-purple-200";
+        return "bg-indigo-100 text-indigo-800 border-indigo-200";
       default:
         return "bg-gray-100 text-gray-800 border-gray-200";
     }
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-purple-50 to-yellow-50 p-3 sm:p-4 lg:p-6">
+    <div className="min-h-screen bg-gradient-to-br from-indigo-50 to-yellow-50 p-3 sm:p-4 lg:p-6">
       {/* Header */}
-      <header className="bg-white rounded-xl shadow-lg p-4 sm:p-6 mb-4 sm:mb-6 border border-purple-100">
+      <header className="bg-white rounded-xl shadow-lg p-4 sm:p-6 mb-4 sm:mb-6 border border-indigo-100">
         <div className="flex flex-col lg:flex-row justify-between items-start lg:items-center gap-4">
           <div>
-            <h1 className="text-2xl sm:text-3xl font-bold text-purple-800 mb-2">
+            <h1 className="text-2xl sm:text-3xl font-bold text-indigo-800 mb-2">
               International Applicants
             </h1>
             <p className="text-gray-600 text-sm sm:text-base">
@@ -480,16 +480,16 @@ export default function InternationalApplicant() {
                 placeholder="Search by name, email, or phone..."
                 value={searchInput}
                 onChange={(e) => setSearchInput(e.target.value)}
-                className="pl-4 pr-4 py-2 border border-purple-200 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent w-full sm:w-64 text-sm"
+                className="pl-4 pr-4 py-2 border border-indigo-200 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-transparent w-full sm:w-64 text-sm"
               />
             </div>
             <button
               onClick={() => fetchApplicants()}
-              className="inline-flex items-center gap-2 px-3 sm:px-4 py-2 rounded-lg bg-purple-600 hover:bg-purple-700 text-white text-sm"
+              className="inline-flex items-center gap-2 px-3 sm:px-4 py-2 rounded-lg bg-indigo-600 hover:bg-indigo-700 text-white text-sm"
               disabled={loading}
             >
               {loading ? (
-                <span className="h-4 w-4 rounded-full border-2 border-purple-300 border-t-white animate-spin" />
+                <span className="h-4 w-4 rounded-full border-2 border-indigo-300 border-t-white animate-spin" />
               ) : (
                 <span className="inline-block">Refresh</span>
               )}
@@ -539,10 +539,10 @@ export default function InternationalApplicant() {
             </p>
           </div>
         </div>
-        <div className="bg-white rounded-xl shadow-lg p-4 sm:p-6 border-l-4 border-purple-400">
+        <div className="bg-white rounded-xl shadow-lg p-4 sm:p-6 border-l-4 border-indigo-400">
           <div>
             <p className="text-gray-600 text-xs sm:text-sm">Hired</p>
-            <p className="text-xl sm:text-2xl font-bold text-purple-600">
+            <p className="text-xl sm:text-2xl font-bold text-indigo-600">
               {hiredCount}
             </p>
           </div>
@@ -550,32 +550,32 @@ export default function InternationalApplicant() {
       </div>
 
       {/* Applicants Table */}
-      <div className="bg-white rounded-xl shadow-lg overflow-hidden border border-purple-100">
-        <div className="bg-gradient-to-r from-purple-600 to-purple-700 px-4 sm:px-6 py-3 sm:py-4">
+      <div className="bg-white rounded-xl shadow-lg overflow-hidden border border-indigo-100">
+        <div className="bg-gradient-to-r from-indigo-600 to-indigo-700 px-4 sm:px-6 py-3 sm:py-4">
           <h2 className="text-lg sm:text-xl font-bold text-white">
             International Applications ({filteredApplicants.length})
           </h2>
         </div>
         <div className="overflow-x-auto">
           <table className="w-full">
-            <thead className="bg-purple-50">
+            <thead className="bg-indigo-50">
               <tr>
-                <th className="px-3 sm:px-6 py-3 sm:py-4 text-left text-xs sm:text-sm font-semibold text-purple-800">
+                <th className="px-3 sm:px-6 py-3 sm:py-4 text-left text-xs sm:text-sm font-semibold text-indigo-800">
                   Application No.
                 </th>
-                <th className="px-3 sm:px-6 py-3 sm:py-4 text-left text-xs sm:text-sm font-semibold text-purple-800">
+                <th className="px-3 sm:px-6 py-3 sm:py-4 text-left text-xs sm:text-sm font-semibold text-indigo-800">
                   Applicant
                 </th>
-                <th className="hidden sm:table-cell px-3 sm:px-6 py-3 sm:py-4 text-left text-xs sm:text-sm font-semibold text-purple-800">
+                <th className="hidden sm:table-cell px-3 sm:px-6 py-3 sm:py-4 text-left text-xs sm:text-sm font-semibold text-indigo-800">
                   Email
                 </th>
-                <th className="hidden lg:table-cell px-3 sm:px-6 py-3 sm:py-4 text-left text-xs sm:text-sm font-semibold text-purple-800">
+                <th className="hidden lg:table-cell px-3 sm:px-6 py-3 sm:py-4 text-left text-xs sm:text-sm font-semibold text-indigo-800">
                   Phone
                 </th>
-                <th className="px-3 sm:px-6 py-3 sm:py-4 text-left text-xs sm:text-sm font-semibold text-purple-800">
+                <th className="px-3 sm:px-6 py-3 sm:py-4 text-left text-xs sm:text-sm font-semibold text-indigo-800">
                   Status
                 </th>
-                <th className="px-3 sm:px-6 py-3 sm:py-4 text-left text-xs sm:text-sm font-semibold text-purple-800">
+                <th className="px-3 sm:px-6 py-3 sm:py-4 text-left text-xs sm:text-sm font-semibold text-indigo-800">
                   Actions
                 </th>
               </tr>
@@ -594,7 +594,7 @@ export default function InternationalApplicant() {
                 filteredApplicants.map((app) => (
                   <tr
                     key={app.id}
-                    className="hover:bg-purple-50 transition-colors"
+                    className="hover:bg-indigo-50 transition-colors"
                   >
                     <td className="px-3 sm:px-6 py-3 sm:py-4 text-xs sm:text-sm text-gray-900 font-medium">
                       SSL-IAP-ID/{app.id}
@@ -620,7 +620,7 @@ export default function InternationalApplicant() {
                     <td className="px-3 sm:px-6 py-3 sm:py-4">
                       <button
                         onClick={() => setSelectedApplicant(ensureArrays(app))}
-                        className="bg-purple-600 hover:bg-purple-700 text-white px-3 py-1 rounded text-xs"
+                        className="bg-indigo-600 hover:bg-indigo-700 text-white px-3 py-1 rounded text-xs"
                       >
                         View
                       </button>
@@ -638,7 +638,7 @@ export default function InternationalApplicant() {
         <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 z-50 p-2 sm:p-4">
           <div className="bg-white rounded-xl shadow-2xl w-full max-w-4xl max-h-[90vh] overflow-y-auto">
             {/* Modal Header */}
-            <div className="bg-gradient-to-r from-purple-600 to-purple-700 px-4 sm:px-6 py-3 sm:py-4 rounded-t-xl">
+            <div className="bg-gradient-to-r from-indigo-600 to-indigo-700 px-4 sm:px-6 py-3 sm:py-4 rounded-t-xl">
               <div className="flex justify-between items-center">
                 <h2 className="text-lg sm:text-xl font-bold text-white">
                   Review Applicant: {selectedApplicant.fullName}
@@ -654,16 +654,16 @@ export default function InternationalApplicant() {
 
             <div className="p-4 sm:p-6 space-y-6">
               {/* Applicant Profile Header */}
-              <div className="bg-gradient-to-br from-purple-50 to-purple-100 rounded-xl p-6 border border-purple-200">
+              <div className="bg-gradient-to-br from-indigo-50 to-indigo-100 rounded-xl p-6 border border-indigo-200">
                 <div className="flex items-start gap-4">
-                  <div className="w-20 h-20 bg-gradient-to-br from-purple-500 to-purple-600 rounded-xl flex items-center justify-center text-white text-2xl font-bold">
+                  <div className="w-20 h-20 bg-gradient-to-br from-indigo-500 to-indigo-600 rounded-xl flex items-center justify-center text-white text-2xl font-bold">
                     {selectedApplicant.fullName.charAt(0)}
                   </div>
                   <div className="flex-1">
-                    <h3 className="text-2xl font-bold text-purple-900 mb-2">
+                    <h3 className="text-2xl font-bold text-indigo-900 mb-2">
                       {selectedApplicant.fullName}
                     </h3>
-                    <div className="flex flex-wrap gap-4 text-sm text-purple-700">
+                    <div className="flex flex-wrap gap-4 text-sm text-indigo-700">
                       <div className="flex items-center gap-2">
                         <Mail className="w-4 h-4" />
                         {selectedApplicant.email}
@@ -711,7 +711,7 @@ export default function InternationalApplicant() {
               <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
                 <div className="bg-white rounded-xl p-6 border border-gray-200 shadow-sm">
                   <h3 className="text-lg font-semibold text-gray-900 mb-4 flex items-center gap-2">
-                    <User className="w-5 h-5 text-purple-600" />
+                    <User className="w-5 h-5 text-indigo-600" />
                     Personal Information
                   </h3>
                   <div className="space-y-3">
@@ -792,7 +792,7 @@ export default function InternationalApplicant() {
 
                 <div className="bg-white rounded-xl p-6 border border-gray-200 shadow-sm">
                   <h3 className="text-lg font-semibold text-gray-900 mb-4 flex items-center gap-2">
-                    <Briefcase className="w-5 h-5 text-purple-600" />
+                    <Briefcase className="w-5 h-5 text-indigo-600" />
                     Professional Details
                   </h3>
                   <div className="space-y-3">
@@ -865,7 +865,7 @@ export default function InternationalApplicant() {
               {/* Media Files Section */}
               <div className="bg-white rounded-xl p-6 border border-gray-200 shadow-sm">
                 <h3 className="text-lg font-semibold text-gray-900 mb-4 flex items-center gap-2">
-                  <ImageIcon className="w-5 h-5 text-purple-600" />
+                  <ImageIcon className="w-5 h-5 text-indigo-600" />
                   Documents & Media Files
                 </h3>
 
@@ -878,15 +878,15 @@ export default function InternationalApplicant() {
                   })()}
 
                   {/* Passport Photos */}
-                  {selectedApplicant.passportPhotos?.length > 0 && (
+                  {selectedApplicant.passportPhotos && selectedApplicant.passportPhotos.length > 0 && (
                     <div className="space-y-3">
                       <h4 className="font-medium text-gray-700 flex items-center gap-2">
                         <ImageIcon className="w-4 h-4" />
                         Passport Photos (
-                        {selectedApplicant.passportPhotos.length})
+                        {selectedApplicant.passportPhotos!.length})
                       </h4>
                       <div className="grid grid-cols-3 gap-2">
-                        {selectedApplicant.passportPhotos.map((photo, idx) => (
+                        {selectedApplicant.passportPhotos!.map((photo, idx) => (
                           <button
                             key={idx}
                             onClick={() =>
@@ -899,9 +899,9 @@ export default function InternationalApplicant() {
                             className="relative group cursor-pointer overflow-hidden rounded-lg"
                           >
                             <img
-                              src={`${API_BASE}${photo}`}
+                              src={withUploadToken(`${API_BASE}${photo}`)}
                               alt={`Passport ${idx + 1}`}
-                              className="w-full h-24 object-cover rounded-lg border border-gray-200 hover:border-purple-400 transition-all group-hover:scale-105"
+                              className="w-full h-24 object-cover rounded-lg border border-gray-200 hover:border-indigo-400 transition-all group-hover:scale-105"
                             />
                             <div className="absolute inset-0 bg-black bg-opacity-0 group-hover:bg-opacity-30 transition-all rounded-lg flex items-center justify-center">
                               <Eye className="w-6 h-6 text-white opacity-0 group-hover:opacity-100 transition-opacity" />
@@ -913,14 +913,14 @@ export default function InternationalApplicant() {
                   )}
 
                   {/* Full Photos */}
-                  {selectedApplicant.fullPhotos?.length > 0 && (
+                  {selectedApplicant.fullPhotos && selectedApplicant.fullPhotos.length > 0 && (
                     <div className="space-y-3">
                       <h4 className="font-medium text-gray-700 flex items-center gap-2">
                         <ImageIcon className="w-4 h-4" />
-                        Full Photos ({selectedApplicant.fullPhotos.length})
+                        Full Photos ({selectedApplicant.fullPhotos!.length})
                       </h4>
                       <div className="grid grid-cols-3 gap-2">
-                        {selectedApplicant.fullPhotos.map((photo, idx) => (
+                        {selectedApplicant.fullPhotos!.map((photo, idx) => (
                           <button
                             key={idx}
                             onClick={() =>
@@ -933,9 +933,9 @@ export default function InternationalApplicant() {
                             className="relative group cursor-pointer overflow-hidden rounded-lg"
                           >
                             <img
-                              src={`${API_BASE}${photo}`}
+                              src={withUploadToken(`${API_BASE}${photo}`)}
                               alt={`Full Photo ${idx + 1}`}
-                              className="w-full h-24 object-cover rounded-lg border border-gray-200 hover:border-purple-400 transition-all group-hover:scale-105"
+                              className="w-full h-24 object-cover rounded-lg border border-gray-200 hover:border-indigo-400 transition-all group-hover:scale-105"
                             />
                           </button>
                         ))}
@@ -944,15 +944,15 @@ export default function InternationalApplicant() {
                   )}
 
                   {/* National ID Photos */}
-                  {selectedApplicant.nationalIdPhotos?.length > 0 && (
+                  {selectedApplicant.nationalIdPhotos && selectedApplicant.nationalIdPhotos.length > 0 && (
                     <div className="space-y-3">
                       <h4 className="font-medium text-gray-700 flex items-center gap-2">
                         <ImageIcon className="w-4 h-4" />
                         National ID Photos (
-                        {selectedApplicant.nationalIdPhotos.length})
+                        {selectedApplicant.nationalIdPhotos!.length})
                       </h4>
                       <div className="grid grid-cols-3 gap-2">
-                        {selectedApplicant.nationalIdPhotos.map(
+                        {selectedApplicant.nationalIdPhotos!.map(
                           (photo, idx) => (
                             <button
                               key={idx}
@@ -966,9 +966,9 @@ export default function InternationalApplicant() {
                               className="relative group cursor-pointer overflow-hidden rounded-lg"
                             >
                               <img
-                                src={`${API_BASE}${photo}`}
+                                src={withUploadToken(`${API_BASE}${photo}`)}
                                 alt={`National ID ${idx + 1}`}
-                                className="w-full h-24 object-cover rounded-lg border border-gray-200 hover:border-purple-400 transition-all group-hover:scale-105"
+                                className="w-full h-24 object-cover rounded-lg border border-gray-200 hover:border-indigo-400 transition-all group-hover:scale-105"
                               />
                             </button>
                           )
@@ -978,15 +978,15 @@ export default function InternationalApplicant() {
                   )}
 
                   {/* Showcase Photos */}
-                  {selectedApplicant.showcasePhotos?.length > 0 && (
+                  {selectedApplicant.showcasePhotos && selectedApplicant.showcasePhotos.length > 0 && (
                     <div className="space-y-3">
                       <h4 className="font-medium text-gray-700 flex items-center gap-2">
                         <ImageIcon className="w-4 h-4" />
                         Showcase Photos (
-                        {selectedApplicant.showcasePhotos.length})
+                        {selectedApplicant.showcasePhotos!.length})
                       </h4>
                       <div className="grid grid-cols-3 gap-2">
-                        {selectedApplicant.showcasePhotos.map((photo, idx) => (
+                        {selectedApplicant.showcasePhotos!.map((photo, idx) => (
                           <button
                             key={idx}
                             onClick={() =>
@@ -999,9 +999,9 @@ export default function InternationalApplicant() {
                             className="relative group cursor-pointer overflow-hidden rounded-lg"
                           >
                             <img
-                              src={`${API_BASE}${photo}`}
+                              src={withUploadToken(`${API_BASE}${photo}`)}
                               alt={`Showcase ${idx + 1}`}
-                              className="w-full h-24 object-cover rounded-lg border border-gray-200 hover:border-purple-400 transition-all group-hover:scale-105"
+                              className="w-full h-24 object-cover rounded-lg border border-gray-200 hover:border-indigo-400 transition-all group-hover:scale-105"
                             />
                           </button>
                         ))}
@@ -1010,14 +1010,14 @@ export default function InternationalApplicant() {
                   )}
 
                   {/* Videos */}
-                  {selectedApplicant.videos?.length > 0 && (
+                  {selectedApplicant.videos && selectedApplicant.videos.length > 0 && (
                     <div className="space-y-3 md:col-span-2">
                       <h4 className="font-medium text-gray-700 flex items-center gap-2">
                         <Video className="w-4 h-4" />
-                        Videos ({selectedApplicant.videos.length})
+                        Videos ({selectedApplicant.videos!.length})
                       </h4>
                       <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                        {selectedApplicant.videos.map((video, idx) => {
+                        {selectedApplicant.videos!.map((video, idx) => {
                           const embedUrl = getYouTubeEmbedUrl(video);
                           return embedUrl ? (
                             <div
@@ -1038,9 +1038,9 @@ export default function InternationalApplicant() {
                               key={idx}
                               className="flex items-center gap-3 p-3 bg-gray-50 rounded-lg border border-gray-200"
                             >
-                              <Video className="w-5 h-5 text-purple-600" />
+                              <Video className="w-5 h-5 text-indigo-600" />
                               <a
-                                href={`${API_BASE}${video}`}
+                                href={withUploadToken(`${API_BASE}${video}`)}
                                 target="_blank"
                                 rel="noopener noreferrer"
                                 className="text-sm text-blue-600 hover:text-blue-800 underline flex-1 truncate"
@@ -1061,15 +1061,15 @@ export default function InternationalApplicant() {
                       Documents
                     </h4>
                     <div className="space-y-2">
-                      {selectedApplicant.resumes?.length > 0 && (
+                      {selectedApplicant.resumes && selectedApplicant.resumes.length > 0 && (
                         <div className="space-y-1">
                           <p className="text-sm font-medium text-gray-600">
                             Resumes
                           </p>
-                          {selectedApplicant.resumes.map((resume, idx) => (
+                          {selectedApplicant.resumes!.map((resume, idx) => (
                             <a
                               key={idx}
-                              href={`${API_BASE}${resume}`}
+                              href={withUploadToken(`${API_BASE}${resume}`)}
                               download
                               className="flex items-center gap-2 text-sm text-blue-600 hover:text-blue-800"
                             >
@@ -1080,16 +1080,16 @@ export default function InternationalApplicant() {
                         </div>
                       )}
 
-                      {selectedApplicant.birthCertificates?.length > 0 && (
+                      {selectedApplicant.birthCertificates && selectedApplicant.birthCertificates.length > 0 && (
                         <div className="space-y-1">
                           <p className="text-sm font-medium text-gray-600">
                             Birth Certificates
                           </p>
-                          {selectedApplicant.birthCertificates.map(
+                          {selectedApplicant.birthCertificates!.map(
                             (cert, idx) => (
                               <a
                                 key={idx}
-                                href={`${API_BASE}${cert}`}
+                                href={withUploadToken(`${API_BASE}${cert}`)}
                                 download
                                 className="flex items-center gap-2 text-sm text-blue-600 hover:text-blue-800"
                               >
@@ -1101,16 +1101,16 @@ export default function InternationalApplicant() {
                         </div>
                       )}
 
-                      {selectedApplicant.goodConducts?.length > 0 && (
+                      {selectedApplicant.goodConducts && selectedApplicant.goodConducts.length > 0 && (
                         <div className="space-y-1">
                           <p className="text-sm font-medium text-gray-600">
                             Good Conduct Certificates
                           </p>
-                          {selectedApplicant.goodConducts.map(
+                          {selectedApplicant.goodConducts!.map(
                             (conduct, idx) => (
                               <a
                                 key={idx}
-                                href={`${API_BASE}${conduct}`}
+                                href={withUploadToken(`${API_BASE}${conduct}`)}
                                 download
                                 className="flex items-center gap-2 text-sm text-blue-600 hover:text-blue-800"
                               >
@@ -1196,9 +1196,9 @@ export default function InternationalApplicant() {
                                 (url, idx) => (
                                   <div key={idx} className="relative group">
                                     <img
-                                      src={url}
+                                      src={withUploadToken(url)}
                                       alt={`showcase-${idx}`}
-                                      className="w-full h-20 object-cover rounded-lg border border-gray-200 hover:border-purple-300 transition-colors"
+                                      className="w-full h-20 object-cover rounded-lg border border-gray-200 hover:border-indigo-300 transition-colors"
                                     />
                                     <div className="absolute inset-0 bg-black bg-opacity-0 group-hover:bg-opacity-20 transition-all rounded-lg flex items-center justify-center">
                                       <Eye className="w-4 h-4 text-white opacity-0 group-hover:opacity-100 transition-opacity" />
@@ -1249,7 +1249,7 @@ export default function InternationalApplicant() {
                                   key={i}
                                   className="flex items-center gap-3 p-3 bg-gray-50 rounded-lg"
                                 >
-                                  <Video className="w-5 h-5 text-purple-600" />
+                                  <Video className="w-5 h-5 text-indigo-600" />
                                   <a
                                     href={v}
                                     target="_blank"
@@ -1272,7 +1272,7 @@ export default function InternationalApplicant() {
               {/* Generate CV Section */}
               <div className="bg-white rounded-xl p-6 border border-gray-200 shadow-sm">
                 <h3 className="text-lg font-semibold text-gray-900 mb-4 flex items-center gap-2">
-                  <FileText className="w-5 h-5 text-purple-600" />
+                  <FileText className="w-5 h-5 text-indigo-600" />
                   Generate CV
                 </h3>
                 <GenerateCVButton id={selectedApplicant.id} />
@@ -1281,7 +1281,7 @@ export default function InternationalApplicant() {
               {/* Actions */}
               <div className="bg-white rounded-xl p-6 border border-gray-200 shadow-sm">
                 <h3 className="text-lg font-semibold text-gray-900 mb-4 flex items-center gap-2">
-                  <CheckCircle className="w-5 h-5 text-purple-600" />
+                  <CheckCircle className="w-5 h-5 text-indigo-600" />
                   Actions
                 </h3>
                 <div className="flex flex-col sm:flex-row justify-end gap-3">
@@ -1325,7 +1325,7 @@ export default function InternationalApplicant() {
 
                   {selectedApplicant.status === "APPROVED" && (
                     <button
-                      className="bg-purple-600 hover:bg-purple-700 text-white px-6 py-3 rounded-lg transition-colors text-sm disabled:opacity-50 flex items-center gap-2 font-medium"
+                      className="bg-indigo-600 hover:bg-indigo-700 text-white px-6 py-3 rounded-lg transition-colors text-sm disabled:opacity-50 flex items-center gap-2 font-medium"
                       onClick={() => handleHire(selectedApplicant.id)}
                       disabled={actionLoading}
                     >
